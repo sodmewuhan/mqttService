@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-@EnableScheduling
+//@EnableScheduling
 @ComponentScan( basePackages = "${application.base-packages}" )
 public class Application extends SpringBootServletInitializer {
 

@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.datasensorn.mqttservice.conf.MqttInputConfig;
+import com.datasensorn.mqttservice.handle.SendDataHandler;
 import com.datasensorn.mqttservice.model.MqttSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,20 +11,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 测试试用
+ */
 @Controller
 @EnableAutoConfiguration
+@Deprecated
 public class TestController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TestController.class);
 
     @Autowired
-    MqttSettings mqttSettings;
+    SendDataHandler sendDataHandler;
+
 
     @RequestMapping("/")
     @ResponseBody
     String home() {
 
-        LOGGER.info( "Started to publish MQTT messages to " + mqttSettings.getTopic() );
+        //LOGGER.info( "Started to publish MQTT messages to " + mqttSettings.getTopic() );
+
+        try {
+            sendDataHandler.mqttPublishingTask();
+        } catch (Exception e) {
+
+        }
 
         return "hello";
     }

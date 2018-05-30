@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.conf;
 
+import com.datasensorn.mqttservice.handle.InputHandler;
 import com.datasensorn.mqttservice.model.MqttSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ public class MqttInputConfig {
     @Autowired
     private MqttSettings mqttSettings;
 
+    @Autowired
+    private InputHandler inputHandler;
+
     @Bean
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();
@@ -45,11 +49,6 @@ public class MqttInputConfig {
     @Bean
     @ServiceActivator( inputChannel = "mqttInputChannel" )
     public MessageHandler handler() {
-        return new MessageHandler() {
-            public void handleMessage( Message<?> message ) throws MessagingException {
-                LOGGER.info( "Recevied Topic: {} >>> Recevied Message: {}",
-                        message.getHeaders().get( "mqtt_topic" ), message.getPayload() );
-            }
-        };
+        return inputHandler;
     }
 }
