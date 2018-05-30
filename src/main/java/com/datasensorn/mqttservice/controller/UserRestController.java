@@ -16,8 +16,8 @@ public class UserRestController {
      * 新用户注册
      * @return
      */
-    @RequestMapping(value = "/resgister", method = RequestMethod.POST)
-    public Result resgister(@RequestBody User user) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Result register(@RequestBody User user) {
 
         ResultGenerator resultGenerator = new ResultGenerator();
         return resultGenerator.genSuccessResult();
