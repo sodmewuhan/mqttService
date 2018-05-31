@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableAutoConfiguration
 //@EnableScheduling
-@ComponentScan( basePackages = "${application.base-packages}" )
+//@ComponentScan( basePackages = "${application.base-packages}" )
 public class Application extends SpringBootServletInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
