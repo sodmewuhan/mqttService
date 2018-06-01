@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -14,8 +15,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-//@EnableScheduling
-//@ComponentScan( basePackages = "${application.base-packages}" )
+@EnableScheduling
+@EnableAsync(proxyTargetClass = true)
+@ComponentScan( basePackages = "${application.base-packages}" )
 public class Application extends SpringBootServletInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
