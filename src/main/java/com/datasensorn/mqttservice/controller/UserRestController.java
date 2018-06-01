@@ -4,6 +4,8 @@ import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.User;
 import com.datasensorn.mqttservice.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value="/app/user")
 public class UserRestController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserRestController.class);
 
     @Autowired
     private UserService userService;
@@ -28,5 +32,20 @@ public class UserRestController {
 
         ResultGenerator resultGenerator = new ResultGenerator();
         return resultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 用户登录
+     * @return
+     */
+    @RequestMapping(value = "/logon", method = RequestMethod.GET)
+    public Result logon(String accountName,String password) {
+
+        boolean retn = userService.logon(accountName,password);
+        LOGGER.info(String.valueOf(retn));
+        ResultGenerator resultGenerator = new ResultGenerator();
+
+        return resultGenerator.genSuccessResult(retn);
+
     }
 }
