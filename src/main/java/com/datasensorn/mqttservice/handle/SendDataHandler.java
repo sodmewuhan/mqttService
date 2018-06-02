@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ public class SendDataHandler {
     @Autowired
     MqttSettings mqttSettings;
 
+    @Async("executorService")
     public void mqttPublishingTask() throws MqttPersistenceException, MqttException {
         String message = "Test from sodmewuhan not scheudle @ " + new Date().toString();
         mqttClient.publish( mqttSettings.getTopic(), new MqttMessage( message.getBytes() ) );

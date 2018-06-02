@@ -29,8 +29,6 @@ public class TestController {
     @ResponseBody
     String home() {
 
-        //LOGGER.info( "Started to publish MQTT messages to " + mqttSettings.getTopic() );
-
         try {
             sendDataHandler.mqttPublishingTask();
         } catch (Exception e) {
