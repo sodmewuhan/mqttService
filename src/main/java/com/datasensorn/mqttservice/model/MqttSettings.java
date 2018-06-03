@@ -7,7 +7,7 @@ public class MqttSettings {
     private String subscriberName;
     private String topic;  //主题
 
-    public MqttSettings(String brokerUrl, String publisherName, String subscriberName, String topic) {
+    public MqttSettings(String brokerUrl, String publisherName, String subscriberName,String topic) {
         this.brokerUrl = brokerUrl;
         this.publisherName = publisherName;
         this.subscriberName = subscriberName;

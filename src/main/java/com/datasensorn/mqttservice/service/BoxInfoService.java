@@ -15,4 +15,12 @@ public interface BoxInfoService {
      * @return
      */
     public int addBoxInfo(BoxInfo boxInfo) throws ServiceException ;
+
+    /**
+     * 删除盒子信息
+     * @param boxInfoId
+     * @return
+     * @throws ServiceException
+     */
+    public int delBoxInfo(Integer boxInfoId) throws ServiceException;
 }

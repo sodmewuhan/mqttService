@@ -27,6 +27,8 @@ public class MqttInputConfig {
     @Autowired
     private InputHandler inputHandler;
 
+//    private MqttPahoMessageDrivenChannelAdapter adapter_topic;
+
     @Bean
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();
@@ -34,14 +36,16 @@ public class MqttInputConfig {
 
     @Bean
     public MessageProducer inbound() {
+
+        //得到所有需要监听的消息队列
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
                 mqttSettings.getBrokerUrl(),
                 mqttSettings.getSubscriberName(),
                 mqttSettings.getTopic() );
         adapter.setOutputChannel( mqttInputChannel() );
+
         return adapter;
     }
-
     /**
      * 接受到消息
      * @return

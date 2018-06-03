@@ -1,19 +1,36 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 192.168.152.130
-Source Server Version : 50721
-Source Host           : 192.168.152.130:3306
+Source Server         : centos
+Source Server Version : 50624
+Source Host           : 192.168.108.129:3306
 Source Database       : datasensorn
 
 Target Server Type    : MYSQL
-Target Server Version : 50721
+Target Server Version : 50624
 File Encoding         : 65001
 
-Date: 2018-06-01 17:02:08
+Date: 2018-06-03 21:50:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for t_box_sensor
+-- ----------------------------
+DROP TABLE IF EXISTS `t_box_sensor`;
+CREATE TABLE `t_box_sensor` (
+  `id` int(11) NOT NULL,
+  `box_id` int(11) NOT NULL COMMENT '盒子编号',
+  `sensor_name` varchar(32) NOT NULL COMMENT '传感器名称',
+  `sensor_propose` varchar(256) DEFAULT NULL COMMENT '传感器用途',
+  `sensor_num` varchar(32) DEFAULT NULL COMMENT '传感器编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='盒子传感器';
+
+-- ----------------------------
+-- Records of t_box_sensor
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_boxinfo
@@ -32,6 +49,28 @@ CREATE TABLE `t_boxinfo` (
 -- Records of t_boxinfo
 -- ----------------------------
 INSERT INTO `t_boxinfo` VALUES ('1', '122', '122', '123', '1');
+
+-- ----------------------------
+-- Table structure for t_fishpond
+-- ----------------------------
+DROP TABLE IF EXISTS `t_fishpond`;
+CREATE TABLE `t_fishpond` (
+  `id` int(11) NOT NULL,
+  `poundName` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '鱼塘名称',
+  `poundAddress` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '鱼塘地址',
+  `poundArea` float(12,4) DEFAULT NULL COMMENT '鱼塘面积（平方米）',
+  `poundDeepth` float(12,4) DEFAULT NULL COMMENT '鱼塘深度',
+  `breedType` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '养殖水产品种',
+  `breedName` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '养殖水产名字',
+  `counts` int(11) DEFAULT NULL COMMENT '养殖数量',
+  `boxInfoId` int(11) DEFAULT NULL COMMENT '盒子编号',
+  `userId` int(11) DEFAULT NULL COMMENT '用户编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='鱼塘信息';
+
+-- ----------------------------
+-- Records of t_fishpond
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_user

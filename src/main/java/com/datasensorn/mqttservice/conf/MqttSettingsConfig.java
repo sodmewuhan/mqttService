@@ -22,7 +22,7 @@ public class MqttSettingsConfig {
 
     @Bean
     public MqttSettings mqttSettings() {
-        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber, mqttTopic );
+        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic);
     }
 
 }

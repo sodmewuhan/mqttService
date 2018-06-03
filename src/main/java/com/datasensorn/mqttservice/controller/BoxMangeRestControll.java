@@ -49,11 +49,20 @@ public class BoxMangeRestControll {
 
     /**
      * 删除盒子信息
-     * @param boxInfo
      * @return
      */
-    public Result delBoxInfo(@RequestBody  BoxInfo boxInfo) {
+    @RequestMapping(value = "/delBoxInfo", method = RequestMethod.POST)
+    public Result delBoxInfo(@RequestBody  Integer boxInfoId) {
 
-        return null;
+        LOGGER.info("======delete box information========");
+
+        try {
+            boxInfoService.delBoxInfo(boxInfoId);
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genSuccessResult();
+        } catch (ServiceException e) {
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genFailResult(e.getMessage());
+        }
     }
 }

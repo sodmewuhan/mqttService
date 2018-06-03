@@ -31,4 +31,14 @@ public class BoxInfoServiceImpl implements BoxInfoService {
         }
         return boxInfoMapper.addBoxInfo(boxInfo);
     }
+
+    @Override
+    public int delBoxInfo(Integer boxInfoId) throws ServiceException {
+
+        if (boxInfoId == null) {
+            throw new ServiceException("删除盒子信息ID为空");
+        }
+
+        return boxInfoMapper.delBoxInfo(boxInfoId);
+    }
 }
