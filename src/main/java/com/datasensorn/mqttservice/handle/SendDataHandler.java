@@ -29,8 +29,8 @@ public class SendDataHandler {
 
     @Async("executorService")
     public void mqttPublishingTask() throws MqttPersistenceException, MqttException {
-        String message = "Test from sodmewuhan not scheudle @ " + new Date().toString();
-        mqttClient.publish( mqttSettings.getTopic(), new MqttMessage( message.getBytes() ) );
+        //String message = "Test from sodmewuhan not scheudle @ " + new Date().toString();
+        //mqttClient.publish( mqttSettings.getTopic(), new MqttMessage( message.getBytes() ) );
     }
 }
 

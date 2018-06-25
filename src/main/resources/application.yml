@@ -3,14 +3,25 @@ application:
   scheduler:
     rate: 5000
   mqtt:
-    host: tcp://iot.eclipse.org:1883
+    host: tcp://101.37.146.78:61613
     publisher:  sodmewuhan-publisher
     subscriber: sodmewuhan-subscriber
-    topic:  #
+    topic:  fish/#
 
 spring:
+#mysql 数据库
   datasource:
-    url:  jdbc:mysql://192.168.108.129:3306/datasensorn?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url:  jdbc:mysql://101.37.146.78:3306/datasensorn?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
     driver-class-name:  com.mysql.jdbc.Driver
+#influxdb 数据库
+  influxdb:
+      url: http://192.168.152.130:8086
+      username: user
+      password:
+      database: mydb
+      retention-policy: autogen
+      connect-timeout: 10
+      read-timeout: 30
+      -timeout: 10write
