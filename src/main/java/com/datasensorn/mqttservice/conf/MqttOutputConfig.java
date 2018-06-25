@@ -55,8 +55,8 @@ public class MqttOutputConfig {
                 mqttSettings.getBrokerUrl(),
                 mqttSettings.getPublisherName() );
         MqttConnectOptions connOptions = new MqttConnectOptions();
-        connOptions.setUserName( mqttSettings.getPublisherName() );
-        connOptions.setPassword( mqttSettings.getPublisherName().toCharArray() );
+        connOptions.setUserName( mqttSettings.getUsername() );
+        connOptions.setPassword( mqttSettings.getPassword().toCharArray() );
         mqttClient.connect( connOptions );
         return mqttClient;
     }

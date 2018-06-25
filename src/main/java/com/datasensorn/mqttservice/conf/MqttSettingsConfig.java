@@ -20,9 +20,15 @@ public class MqttSettingsConfig {
     @Value( "${application.mqtt.topic}" )
     private String mqttTopic;
 
+    @Value("${application.mqtt.username}")
+    private String username;
+
+    @Value("${application.mqtt.password}")
+    private String password;
+
     @Bean
     public MqttSettings mqttSettings() {
-        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic);
+        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic,username,password);
     }
 
 }

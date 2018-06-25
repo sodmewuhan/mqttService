@@ -7,11 +7,19 @@ public class MqttSettings {
     private String subscriberName;
     private String topic;  //主题
 
-    public MqttSettings(String brokerUrl, String publisherName, String subscriberName,String topic) {
+    //用户名和密码
+    private String username;
+    private String password;
+
+    public MqttSettings(String brokerUrl, String publisherName, String subscriberName,String topic,
+                        String username,String password) {
         this.brokerUrl = brokerUrl;
         this.publisherName = publisherName;
         this.subscriberName = subscriberName;
         this.topic = topic;
+
+        this.username = username;
+        this.password = password;
     }
 
     public String getBrokerUrl() {
@@ -44,5 +52,21 @@ public class MqttSettings {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
