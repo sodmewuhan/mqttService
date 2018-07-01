@@ -23,21 +23,7 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>maven-central</id>
-            <name>maven-central</name>
-            <url>http://119.3.36.56:8081/repository/maven-central/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -72,14 +58,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 打包时候去掉tomcat的依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-
         <!--常用库依赖-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -97,7 +75,6 @@
         </dependency>
 
         <!--MySQL JDBC驱动-->
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

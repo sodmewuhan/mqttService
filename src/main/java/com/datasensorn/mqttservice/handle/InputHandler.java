@@ -2,6 +2,7 @@ package com.datasensorn.mqttservice.handle;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.datasensorn.mqttservice.Utils.Constant;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class InputHandler implements MessageHandler {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(InputHandler.class);
+
 
     //上传数据保存至influxdb数据库
     @Autowired
@@ -41,15 +43,16 @@ public class InputHandler implements MessageHandler {
                   topic, message.getPayload());
             if (topic.contains("fish/")) {
                 //如果是上报数据
-                String[] topics = topic.split("fish/");
+                String[] topics = topic.split(Constant.MQTT_PREFIX);
                 JSONObject jsonObject = JSON.parseObject(message.getPayload().toString());
                 //保存至数据库中
                 influxDBTemplate.createDatabase();
-                final Point p = Point.measurement("fish")
+                // measurement 数据库中的表  point 数据库中的记录
+                final Point p = Point.measurement(Constant.INFLUXDB_NAME)
                         .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                        .addField("boxid",topics[1])
-                        .addField("deviceId",jsonObject.getIntValue("device"))
-                        .addField("value",jsonObject.getString("value"))
+                        .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
+                        .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue("device"))
+                        .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString("value"))
                         .build();
                 influxDBTemplate.write(p);
             }

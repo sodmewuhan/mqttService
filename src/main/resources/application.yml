@@ -1,3 +1,6 @@
+server:
+  port: 8011
+
 application:
   base-packages:  com.datasensorn.mqttservice
   scheduler:

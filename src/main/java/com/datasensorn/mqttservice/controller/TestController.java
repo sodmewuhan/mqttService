@@ -35,23 +35,6 @@ public class TestController {
     @ResponseBody
     String home() {
 
-        try {
-            //sendDataHandler.mqttPublishingTask();
-
-            influxDBTemplate.createDatabase();
-            final Point p = Point.measurement("disk")
-                    .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                    .tag("tenant", "default")
-                    .addField("used", 80L)
-                    .addField("free", 1L)
-                    .build();
-
-            influxDBTemplate.write(p);
-
-        } catch (Exception e) {
-
-        }
-
         return "hello";
     }
 }
