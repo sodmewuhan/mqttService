@@ -6,7 +6,7 @@ application:
     host: tcp://101.37.146.78:61613
     publisher:  sodmewuhan-publisher
     subscriber: sodmewuhan-subscriber
-    topic:  fish
+    topic:  fish/#
     username: admin
     password: password
 
@@ -20,9 +20,9 @@ spring:
 #influxdb 数据库
   influxdb:
       url: http://101.37.146.78:8086
-      username: user
-      password:
-      database: mydb
+      username: admin
+      password: admin
+      database: fishtech
       retention-policy: autogen
       connect-timeout: 10
       read-timeout: 30

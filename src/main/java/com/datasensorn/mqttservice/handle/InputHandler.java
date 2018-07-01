@@ -25,7 +25,7 @@ public class InputHandler implements MessageHandler {
     private InfluxDBTemplate<Point> influxDBTemplate;
 
     /**
-     * 上报消息的处理
+     * 上报消息的处理，用线程来处理
      * @param message
      * @throws MessagingException
      */
