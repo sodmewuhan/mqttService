@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.model.biz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.Set;
  */
 public class ChartSerial {
 
-    private List<ChartPoint> points;
+    private List<ChartPoint> points = new ArrayList<>();
 
     //设备类型
     private String deviceType;
