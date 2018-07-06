@@ -12,10 +12,9 @@ public interface ChartSarvice {
     /**
      *  得到图表的序列信息
      * @param boxId    盒子编号
-     * @param begin  开始时间
-     * @param end    结束时间
+     * @param days  天数
      * @return
      */
-    public ChartSerial getChartSerial(String boxId,String deviceId, Date begin,Date end);
+    public ChartSerial getChartSerial(String boxId,String deviceId,int days);
 
 }
