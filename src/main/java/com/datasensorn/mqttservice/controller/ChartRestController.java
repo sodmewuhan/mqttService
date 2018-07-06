@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
+import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
 import com.datasensorn.mqttservice.service.ChartSarvice;
@@ -8,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 /**
  * 服务器的图表
@@ -22,16 +21,17 @@ public class ChartRestController {
 
     @Autowired
     private ChartSarvice chartSarvice;
+
     /**
      * 得到一天的数据
      * @return
      */
     @RequestMapping(value = "/day", method = RequestMethod.POST)
     @ResponseBody
-    public Result getday() {
+    public Result getday(@RequestBody ChartRequest chartRequest) {
         LOGGER.info("called the method is getday");
         ResultGenerator resultGenerator = new ResultGenerator();
-        ChartSerial chartSerial = chartSarvice.getChartSerial("15919829955","0",2);
+        ChartSerial chartSerial = chartSarvice.getChartSerial(chartRequest);
         return  resultGenerator.genSuccessResult(chartSerial);
     }
 }

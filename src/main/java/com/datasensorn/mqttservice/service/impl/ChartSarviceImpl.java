@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice.service.impl;
 
 import com.datasensorn.mqttservice.Utils.Constant;
+import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.biz.ChartPoint;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
 import com.datasensorn.mqttservice.service.ChartSarvice;
@@ -15,7 +16,6 @@ import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,16 +31,16 @@ public class ChartSarviceImpl implements ChartSarvice {
 
 
     @Override
-    public ChartSerial getChartSerial(String boxId,String deviceId, int days) {
+    public ChartSerial getChartSerial(ChartRequest chartRequest) {
         // 建立数据库的实例
         influxDBTemplate.createDatabase();
 
         StringBuffer command = new StringBuffer();
         command.append("SELECT * FROM fish WHERE deviceId = ")
-                .append(deviceId)
-                .append(" and boxid = ").append("\'").append(boxId).append("\'")
+                .append(chartRequest.getDeviceId())
+                .append(" and boxid = ").append("\'").append(chartRequest.getBoxId()).append("\'")
                 .append(" and time > now() - ")
-                .append(String.valueOf(days * 24*60))
+                .append(String.valueOf(chartRequest.getDays() * 24*60))
                 .append("m");
 
         ChartSerial chartSerial = new ChartSerial();
