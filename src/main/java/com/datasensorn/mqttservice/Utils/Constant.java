@@ -13,7 +13,7 @@ public class Constant {
     /**
      * influxdb的measurement名字
      */
-    public static final String INFLUXDB_NAME = "fishtech";
+    public static final String INFLUXDB_NAME = "fish";
 
     /**
      * influxdb 列名 ： boxid

@@ -25,7 +25,7 @@ spring:
       url: http://101.37.146.78:8086
       username: admin
       password: admin
-      database: fish
+      database: fishtech
       retention-policy: autogen
       connect-timeout: 10
       read-timeout: 30
