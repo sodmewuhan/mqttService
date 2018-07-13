@@ -11,8 +11,11 @@ public class MqttSettings {
     private String username;
     private String password;
 
+    private Integer timeout;
+    private Integer heartbeat;
+
     public MqttSettings(String brokerUrl, String publisherName, String subscriberName,String topic,
-                        String username,String password) {
+                        String username,String password,Integer timeout,Integer heartbeat) {
         this.brokerUrl = brokerUrl;
         this.publisherName = publisherName;
         this.subscriberName = subscriberName;
@@ -20,6 +23,9 @@ public class MqttSettings {
 
         this.username = username;
         this.password = password;
+
+        this.timeout = timeout;
+        this.heartbeat = heartbeat;
     }
 
     public String getBrokerUrl() {
@@ -68,5 +74,21 @@ public class MqttSettings {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Integer timeout) {
+        this.timeout = timeout;
+    }
+
+    public Integer getHeartbeat() {
+        return heartbeat;
+    }
+
+    public void setHeartbeat(Integer heartbeat) {
+        this.heartbeat = heartbeat;
     }
 }

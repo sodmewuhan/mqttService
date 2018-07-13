@@ -12,14 +12,16 @@ application:
     topic:  fish/#
     username: admin
     password: password
+    timeout:  10
+    heartbeat:  20
 
 spring:
 #mysql 数据库
   datasource:
     url:  jdbc:mysql://101.37.146.78:3306/datasensorn?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: 123456
-    driver-class-name:  com.mysql.jdbc.Driver
+    password: hello123456
+    driver-class-name: com.mysql.jdbc.Driver
 #influxdb 数据库
   influxdb:
       url: http://101.37.146.78:8086

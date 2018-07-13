@@ -11,7 +11,7 @@ import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.data.influxdb.converter.PointConverter;
 
 /**
- * influxdb 数据库
+ * influxdb 数据库的连接信息
  */
 @Configuration
 @EnableConfigurationProperties(InfluxDBProperties.class)

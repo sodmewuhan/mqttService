@@ -7,7 +7,7 @@ public class User {
 
     public  int id;  //用户id
 
-    private String accountName;//账号名称
+    private  String phone; //电话号码
 
     private String password; //密码
 
@@ -31,12 +31,12 @@ public class User {
         this.id = id;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPassword() {

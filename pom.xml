@@ -8,14 +8,12 @@
     <groupId>com.datasensorn</groupId>
     <artifactId>mqttService</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.14.RELEASE</version>
-
-        <relativePath/>
     </parent>
 
     <properties>
@@ -127,6 +125,6 @@
             </plugin>
         </plugins>
 
-        <finalName>mqttService</finalName>
+        <!--<finalName>mqttService</finalName> -->
     </build>
 </project>

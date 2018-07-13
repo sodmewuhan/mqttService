@@ -61,6 +61,10 @@ public class MqttInputConfig {
         connOptions.setServerURIs(new String[] {mqttSettings.getBrokerUrl()});
         connOptions.setUserName(mqttSettings.getUsername());
         connOptions.setPassword(mqttSettings.getPassword().toCharArray());
+        //设置超时时间
+        connOptions.setConnectionTimeout(mqttSettings.getTimeout());
+        // 设置会话心跳时间
+        connOptions.setKeepAliveInterval(mqttSettings.getHeartbeat());
 
         factory.setConnectionOptions(connOptions);
         return factory;

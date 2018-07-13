@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * 用户管理控制类
  */
 @RestController
-@RequestMapping(value="/app/user")
+@RequestMapping(value="/api/user")
 public class UserRestController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserRestController.class);
@@ -38,10 +38,10 @@ public class UserRestController {
      * 用户登录
      * @return
      */
-    @RequestMapping(value = "/logon", method = RequestMethod.GET)
-    public Result logon(String accountName,String password) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Result login(String phone,String password) {
 
-        boolean retn = userService.logon(accountName,password);
+        boolean retn = userService.logon(phone,password);
         LOGGER.info(String.valueOf(retn));
         ResultGenerator resultGenerator = new ResultGenerator();
 

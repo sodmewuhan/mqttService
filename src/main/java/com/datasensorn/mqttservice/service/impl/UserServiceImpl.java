@@ -18,13 +18,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(User user) {
-        LOGGER.info("the user name is " + user.getAccountName());
+//        LOGGER.info("the user name is " + user.getAccountName());
         userMapper.registerUser(user);
     }
 
     @Override
-    public boolean logon(String accountName, String password) {
-        return userMapper.logon(accountName,password) == 0 ? false:true;
-
+    public boolean logon(String phone, String password) {
+        return userMapper.logon(phone,password) == 0 ? false:true;
     }
 }

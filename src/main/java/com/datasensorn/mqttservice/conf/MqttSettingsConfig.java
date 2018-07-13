@@ -26,9 +26,15 @@ public class MqttSettingsConfig {
     @Value("${application.mqtt.password}")
     private String password;
 
+    @Value("${application.mqtt.timeout}")
+    private Integer timeout;
+
+    @Value("${application.mqtt.heartbeat}")
+    private Integer heartbeat;
+
     @Bean
     public MqttSettings mqttSettings() {
-        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic,username,password);
+        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic,username,password,timeout,heartbeat);
     }
 
 }

@@ -18,10 +18,10 @@ public interface UserMapper {
 
     /**
      * 用户登录
-     * @param accountName
+     * @param phone
      * @param password
      * @return
      */
-    @Select("select count(1) from t_user where accountName = #{accountName} and password=#{password}")
-    public int logon(@Param("accountName") String accountName, @Param("password") String password);
+    @Select("select count(1) from t_user where phone = #{phone} and password=#{password}")
+    public int logon(@Param("phone") String phone, @Param("password") String password);
 }

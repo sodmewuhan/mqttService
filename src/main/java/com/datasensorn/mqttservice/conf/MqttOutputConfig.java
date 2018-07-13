@@ -51,12 +51,18 @@ public class MqttOutputConfig {
 
     @Bean
     public MqttClient mqttClient() throws MqttException {
+        //注意：在同一个clientId 重复启动的时候，mqtt存在掉线的问题
         MqttClient mqttClient = new MqttClient(
                 mqttSettings.getBrokerUrl(),
-                mqttSettings.getPublisherName() );
+                mqttSettings.getPublisherName());
         MqttConnectOptions connOptions = new MqttConnectOptions();
         connOptions.setUserName( mqttSettings.getUsername() );
         connOptions.setPassword( mqttSettings.getPassword().toCharArray() );
+
+        //设置超时时间
+        connOptions.setConnectionTimeout(mqttSettings.getTimeout());
+        // 设置会话心跳时间
+        connOptions.setKeepAliveInterval(mqttSettings.getHeartbeat());
         mqttClient.connect( connOptions );
         return mqttClient;
     }
