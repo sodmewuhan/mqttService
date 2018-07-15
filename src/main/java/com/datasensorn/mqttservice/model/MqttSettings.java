@@ -10,9 +10,12 @@ public class MqttSettings {
     //用户名和密码
     private String username;
     private String password;
-
+    //超时 和 心跳
     private Integer timeout;
     private Integer heartbeat;
+//
+//    // servierURI
+//    private String serviceURI;
 
     public MqttSettings(String brokerUrl, String publisherName, String subscriberName,String topic,
                         String username,String password,Integer timeout,Integer heartbeat) {

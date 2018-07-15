@@ -1,8 +1,6 @@
 package com.datasensorn.mqttservice.controller;
 
-import com.datasensorn.mqttservice.conf.MqttInputConfig;
-import com.datasensorn.mqttservice.handle.SendDataHandler;
-import com.datasensorn.mqttservice.model.MqttSettings;
+//import com.datasensorn.mqttservice.handle.SendDataHandler;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TestController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TestController.class);
-
-    @Autowired
-    SendDataHandler sendDataHandler;
+//
+//    @Autowired
+//    SendDataHandler sendDataHandler;
 
     @Autowired
     private InfluxDBTemplate<Point> influxDBTemplate;

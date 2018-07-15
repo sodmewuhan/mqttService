@@ -35,6 +35,14 @@
             </exclusions>
             -->
         </dependency>
+
+        <!-- 热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -106,6 +114,7 @@
             <artifactId>spring-data-influxdb</artifactId>
             <version>1.7</version>
         </dependency>
+
     </dependencies>
 
     <build>

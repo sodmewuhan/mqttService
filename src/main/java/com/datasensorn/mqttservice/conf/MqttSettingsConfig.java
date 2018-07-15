@@ -32,9 +32,11 @@ public class MqttSettingsConfig {
     @Value("${application.mqtt.heartbeat}")
     private Integer heartbeat;
 
+
     @Bean
     public MqttSettings mqttSettings() {
-        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic,username,password,timeout,heartbeat);
+        return new MqttSettings( mqttHost, mqttPublisher, mqttSubscriber,mqttTopic,
+                username,password,timeout,heartbeat);
     }
 
 }

@@ -14,19 +14,19 @@ import java.util.Date;
 /**
  * 测试试用
  */
-@Component
-@Deprecated
-public class MqttPublishingSchedular {
-
-    @Autowired
-    MqttClient mqttClient;
-
-    @Autowired
-    MqttSettings mqttSettings;
-
-    //@Scheduled( fixedRateString = "${application.scheduler.rate}" )
-    public void scheduledMqttPublishingTask() throws MqttPersistenceException, MqttException {
-        String message = "Test from sodmewuhan @ " + new Date().toString();
-        mqttClient.publish( mqttSettings.getTopic(), new MqttMessage( message.getBytes() ) );
-    }
-}
+//@Component
+//@Deprecated
+//public class MqttPublishingSchedular {
+//
+//    @Autowired
+//    MqttClient mqttClient;
+//
+//    @Autowired
+//    MqttSettings mqttSettings;
+//
+//    //@Scheduled( fixedRateString = "${application.scheduler.rate}" )
+//    public void scheduledMqttPublishingTask() throws MqttPersistenceException, MqttException {
+//        String message = "Test from sodmewuhan @ " + new Date().toString();
+//        mqttClient.publish( mqttSettings.getTopic(), new MqttMessage( message.getBytes() ) );
+//    }
+//}
