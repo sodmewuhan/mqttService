@@ -9,7 +9,7 @@ application:
     host: tcp://101.37.146.78:61613
     publisher:  sodmewuhan-publisher
     subscriber: sodmewuhan-subscriber
-    topic:  fish/15919829955
+    topic:  fish/#
     username: admin
     password: password
     timeout:  10
