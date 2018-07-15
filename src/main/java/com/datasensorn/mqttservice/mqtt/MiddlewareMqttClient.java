@@ -1,16 +1,13 @@
 package com.datasensorn.mqttservice.mqtt;
 
+import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
+import com.datasensorn.mqttservice.model.InfluxDBSettings;
 import com.datasensorn.mqttservice.model.MqttSettings;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.integration.channel.DirectChannel;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -27,11 +24,14 @@ public class MiddlewareMqttClient {
     @Autowired
     private MqttSettings mqttSettings;
 
+    @Autowired
+   private InfluxDBSettings influxDBSettings;
 
-//    @Bean
-//    public MessageChannel mqttInputChannel() {
-//        return new DirectChannel();
-//    }
+    @Autowired
+    private InfluxDBUtil influxDBUtil;
+//
+//    @Autowired
+//    PushCallback pushCallback;
 
     public MqttConnectOptions getOptions() {
         MqttConnectOptions options = new MqttConnectOptions();
@@ -54,18 +54,34 @@ public class MiddlewareMqttClient {
         //判断拦截状态，这里注意一下，如果没有这个判断，是非常坑的
         if (!client.isConnected()) {
             client.connect(options);
-            LOGGER.info("==============mqtt 连接成功");
-
+            LOGGER.info("==============mqtt 连接成功，订阅主题" + mqttSettings.getTopic());
             client.subscribe(mqttSettings.getTopic());
+            client.setCallback(new MqttCallback() {
+                @Override
+                public void connectionLost(Throwable cause) {
+
+                }
+
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+                    LOGGER.info("recvice message is " + message.getPayload());
+                }
+
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
+
+                }
+            });
         }else {//这里的逻辑是如果连接成功就重新连接
             client.disconnect();
             client.connect(getOptions());
             client.subscribe(mqttSettings.getTopic());
-            LOGGER.info("mqtt重新连接成功");
+            //client.setCallback(pushCallback);
+            LOGGER.info("mqtt重新连接成功，订阅主题" + mqttSettings.getTopic());
         }
     }
 
-    //监听设备发来的消息
     @PostConstruct
     public void init() {
         try {
@@ -74,4 +90,18 @@ public class MiddlewareMqttClient {
             LOGGER.error(e.getMessage(),e.getCause());
         }
     }
+
+    public static MqttClient getClient() {
+        return client;
+    }
+
+    public InfluxDBSettings getInfluxDBSettings() {
+        return influxDBSettings;
+    }
+
+    public InfluxDBUtil getInfluxDBUtil() {
+        return influxDBUtil;
+    }
+
+
 }

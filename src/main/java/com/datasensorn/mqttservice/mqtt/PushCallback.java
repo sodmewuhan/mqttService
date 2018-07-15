@@ -1,18 +1,19 @@
 package com.datasensorn.mqttservice.mqtt;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.datasensorn.mqttservice.Utils.Constant;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.messaging.MessagingException;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,10 +26,6 @@ public class PushCallback implements MqttCallback {
     public PushCallback(MiddlewareMqttClient service) {
         this.service = service;
     }
-
-    //上传数据保存至influxdb数据库
-    @Autowired
-    private InfluxDBTemplate<Point> influxDBTemplate;
 
     @Override
     public void connectionLost(Throwable cause) {
@@ -43,16 +40,15 @@ public class PushCallback implements MqttCallback {
         }
     }
 
+
     /**
      * 异步执行
      * @param topic
      * @param message
-     * @throws Exception
      */
     @Async("executorService")
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-
         //主题
         if (null == message.getPayload()) {
             throw new MessagingException("the topic is empty.");
@@ -62,23 +58,52 @@ public class PushCallback implements MqttCallback {
             if (topic.contains("fish/")) {
                 //如果是上报数据
                 String[] topics = topic.split(Constant.MQTT_PREFIX);
-                JSONObject jsonObject = JSON.parseObject(message.getPayload().toString());
-                //保存至数据库中
-                influxDBTemplate.createDatabase();
-                // measurement 数据库中的表  point 数据库中的记录
-                final Point p = Point.measurement(Constant.INFLUXDB_NAME)
-                        .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                        .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
-                        .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue("device"))
-                        .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString("value"))
-                        .build();
-                influxDBTemplate.write(p);
+                String msg = new String(message.getPayload());
+                if (isValidJSON(msg)) {
+                    JSONObject jsonObject = JSON.parseObject(msg);
+                    //保存至数据库中
+                    InfluxDB influxDB = service.getInfluxDBUtil().getInfluxDB();
+//                    // measurement 数据库中的表  point 数据库中的记录
+                    final Point p = Point.measurement(Constant.INFLUXDB_NAME)
+                            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                            .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
+                            .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue("device"))
+                            .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString("value"))
+                            .build();
+                    influxDB.write(service.getInfluxDBSettings().getDatabase(),
+                            service.getInfluxDBSettings().getRetentionpolicy(),
+                            p);
+                }
+
             }
         }
+
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
 
+        //LOGGER.info("the message is delivery overed");
     }
+
+    /**
+     * 判断json是否合法
+     * @param str
+     * @return
+     */
+    private boolean isValidJSON(String str) {
+        try {
+            JSONObject.parseObject(str);
+        } catch (JSONException ex) {
+            try {
+                JSONObject.parseArray(str);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+
 }

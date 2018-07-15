@@ -9,7 +9,7 @@ application:
     host: tcp://101.37.146.78:61613
     publisher:  sodmewuhan-publisher
     subscriber: sodmewuhan-subscriber
-    topic:  fish/#
+    topic:  fish/15919829955
     username: admin
     password: password
     timeout:  10
@@ -28,7 +28,7 @@ spring:
       username: admin
       password: admin
       database: fishtech
-      retention-policy: autogen
-      connect-timeout: 10
-      read-timeout: 30
+      retentionpolicy: autogen
+      connecttimeout: 10
+      readtimeout: 30
       timeout: 10
