@@ -11,7 +11,6 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.MessagingException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;;
 
@@ -22,6 +21,9 @@ public class PushCallback implements MqttCallback {
     private final static Logger LOGGER = LoggerFactory.getLogger(PushCallback.class);
 
     private MiddlewareMqttClient service;
+
+    public PushCallback() {
+    }
 
     public PushCallback(MiddlewareMqttClient service) {
         this.service = service;
@@ -46,15 +48,15 @@ public class PushCallback implements MqttCallback {
      * @param topic
      * @param message
      */
-    @Async("executorService")
+    //@Async("executorService")
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         //主题
         if (null == message.getPayload()) {
-            throw new MessagingException("the topic is empty.");
+           //s throw new MessagingException("the topic is empty.");
         } else {
             LOGGER.info( "Recevied the list Topic: {} >>> Recevied Message: {}",
-                    topic, message.getPayload());
+                    topic, new String(message.getPayload()));
             if (topic.contains("fish/")) {
                 //如果是上报数据
                 String[] topics = topic.split(Constant.MQTT_PREFIX);

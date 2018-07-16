@@ -1,7 +1,6 @@
 package com.datasensorn.mqttservice.conf;
 
 import com.datasensorn.mqttservice.model.InfluxDBSettings;
-import com.datasensorn.mqttservice.model.MqttSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

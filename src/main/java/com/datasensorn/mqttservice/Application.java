@@ -11,9 +11,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-//import org.springframework.web.cors.CorsConfiguration;
-//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-//import org.springframework.web.filter.CorsFilter;
 
 /**
  * spring boot 启动类
@@ -38,26 +35,11 @@ public class Application extends SpringBootServletInitializer {
         SpringApplication.run(Application.class, args);
 
         LOGGER.info("Service is started!");
+
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(Application.class);
     }
-
-
-//    private CorsConfiguration buildConfig() {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.addAllowedOrigin("*");
-//        corsConfiguration.addAllowedHeader("*");
-//        corsConfiguration.addAllowedMethod("*");
-//        return corsConfiguration;
-//    }
-//
-//    public CorsFilter corsFilter() {
-//        LOGGER.info("=======解决跨域问题==========");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**",buildConfig());
-//        return new CorsFilter(source);
-//    }
 }

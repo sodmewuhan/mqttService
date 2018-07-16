@@ -8,18 +8,18 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Service
+@Component
 public class MiddlewareMqttClient {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MiddlewareMqttClient.class);
 
-    private static MqttClient client;
+    private MqttClient client;
 
-    private final static String CLIENTID = "mqttServicePublish";
+//    private final static String CLIENTID = "mqttServicePublish";
 
     @Autowired
     private MqttSettings mqttSettings;
@@ -47,37 +47,21 @@ public class MiddlewareMqttClient {
     public void connect() throws MqttException {
         //防止重复创建MQTTClient实例
         if (client==null) {
-            client = new MqttClient( mqttSettings.getBrokerUrl(), CLIENTID, new MemoryPersistence());
-            client.setCallback(new PushCallback(MiddlewareMqttClient.this));
+            client = new MqttClient( mqttSettings.getBrokerUrl(),
+                    mqttSettings.getPublisherName(), new MemoryPersistence());
+            client.setCallback(new PushCallback(this));
         }
         MqttConnectOptions options = getOptions();
+        client.connect(options);
         //判断拦截状态，这里注意一下，如果没有这个判断，是非常坑的
         if (!client.isConnected()) {
-            client.connect(options);
-            LOGGER.info("==============mqtt 连接成功，订阅主题" + mqttSettings.getTopic());
             client.subscribe(mqttSettings.getTopic());
-            client.setCallback(new MqttCallback() {
-                @Override
-                public void connectionLost(Throwable cause) {
-
-                }
-
-                @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                    LOGGER.info("recvice message is " + message.getPayload());
-                }
-
-                @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-
-                }
-            });
+            LOGGER.info("==============mqtt 连接成功，订阅主题" + mqttSettings.getTopic());
         }else {//这里的逻辑是如果连接成功就重新连接
             client.disconnect();
             client.connect(getOptions());
             client.subscribe(mqttSettings.getTopic());
-            //client.setCallback(pushCallback);
+            client.setCallback(new PushCallback(this));
             LOGGER.info("mqtt重新连接成功，订阅主题" + mqttSettings.getTopic());
         }
     }
@@ -91,9 +75,9 @@ public class MiddlewareMqttClient {
         }
     }
 
-    public static MqttClient getClient() {
-        return client;
-    }
+//    public static MqttClient getClient() {
+//        return client;
+//    }
 
     public InfluxDBSettings getInfluxDBSettings() {
         return influxDBSettings;
