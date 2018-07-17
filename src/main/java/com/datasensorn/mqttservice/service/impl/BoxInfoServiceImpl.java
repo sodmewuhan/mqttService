@@ -1,8 +1,12 @@
 package com.datasensorn.mqttservice.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.datasensorn.mqttservice.controller.model.InstructionObject;
 import com.datasensorn.mqttservice.exception.ServiceException;
+import com.datasensorn.mqttservice.model.MqttSettings;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 import com.datasensorn.mqttservice.model.biz.BoxInfoMapper;
+import com.datasensorn.mqttservice.mqtt.MiddlewareMqttClient;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +21,12 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
     @Autowired
     private BoxInfoMapper boxInfoMapper;
+
+    @Autowired
+    private MiddlewareMqttClient middlewareMqttClient;
+
+    @Autowired
+    private MqttSettings mqttSettings;
 
     @Override
     public int addBoxInfo(BoxInfo boxInfo) throws ServiceException {
@@ -40,5 +50,15 @@ public class BoxInfoServiceImpl implements BoxInfoService {
         }
 
         return boxInfoMapper.delBoxInfo(boxInfoId);
+    }
+
+    @Override
+    public void publishMessage(InstructionObject instructionObject) throws Exception {
+
+        String[] topics = mqttSettings.getTopic().split("/");
+        String sendTopic = topics[0] + "/" + instructionObject.getTopic();
+
+        String message =  JSON.toJSONString(instructionObject);
+        middlewareMqttClient.publishMessage(sendTopic, message);
     }
 }

@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.service;
 
+import com.datasensorn.mqttservice.controller.model.InstructionObject;
 import com.datasensorn.mqttservice.exception.ServiceException;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 
@@ -23,4 +24,10 @@ public interface BoxInfoService {
      * @throws ServiceException
      */
     public int delBoxInfo(Integer boxInfoId) throws ServiceException;
+
+    /**
+     * 向设备发送消息
+     * @throws Exception
+     */
+    public void publishMessage(InstructionObject instructionObject) throws Exception;
 }

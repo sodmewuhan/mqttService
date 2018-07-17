@@ -19,8 +19,6 @@ public class MiddlewareMqttClient {
 
     private MqttClient client;
 
-//    private final static String CLIENTID = "mqttServicePublish";
-
     @Autowired
     private MqttSettings mqttSettings;
 
@@ -29,9 +27,10 @@ public class MiddlewareMqttClient {
 
     @Autowired
     private InfluxDBUtil influxDBUtil;
-//
-//    @Autowired
-//    PushCallback pushCallback;
+
+    private static final Integer  QOS = 2;//投递消息，保证值投递一次
+
+    private static final Boolean RETAINED = true; //MQ持久消息
 
     public MqttConnectOptions getOptions() {
         MqttConnectOptions options = new MqttConnectOptions();
@@ -88,4 +87,15 @@ public class MiddlewareMqttClient {
     }
 
 
+    /**
+     * 向终端下发指令
+     * @param msg
+     */
+    public void publishMessage(String topic ,String msg) throws Exception {
+
+        MqttMessage message = new MqttMessage(msg.getBytes());
+        message.setQos(QOS);
+        message.setRetained(RETAINED);
+        client.publish(topic,message);
+    }
 }
