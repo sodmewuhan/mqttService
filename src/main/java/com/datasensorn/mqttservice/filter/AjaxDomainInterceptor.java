@@ -11,7 +11,7 @@ public class AjaxDomainInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");//设置允许哪些域名应用进行ajax访问
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "PUT,POST,DELETE");
         httpServletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         return true;

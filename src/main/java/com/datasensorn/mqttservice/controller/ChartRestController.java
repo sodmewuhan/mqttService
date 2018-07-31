@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * 服务器的图表
  */
 @RestController
-@RequestMapping(value = "/app/chart")
+@RequestMapping(value = "/api/chart")
 public class ChartRestController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ChartRestController.class);
@@ -31,7 +31,7 @@ public class ChartRestController {
     public Result getday(@RequestBody ChartRequest chartRequest) {
         LOGGER.info("called the method is getday");
         ResultGenerator resultGenerator = new ResultGenerator();
-        ChartSerial chartSerial = chartSarvice.getChartSerial(chartRequest);
-        return  resultGenerator.genSuccessResult(chartSerial);
+        //ChartSerial chartSerial = chartSarvice.getChartSerial(chartRequest);
+        return  resultGenerator.genSuccessResult(null);
     }
 }
