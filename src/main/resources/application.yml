@@ -28,7 +28,12 @@ spring:
       username: admin
       password: admin
       database: fishtech
-      retentionpolicy: autogen
       connecttimeout: 10
       readtimeout: 30
       timeout: 10
+# thymeleaf 配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache:  false
+    mode: HTML

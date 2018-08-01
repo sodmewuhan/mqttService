@@ -1,7 +1,7 @@
 package com.datasensorn.mqttservice.service;
 
-import com.datasensorn.mqttservice.model.Request.ChartData;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
+import com.datasensorn.mqttservice.model.biz.AxisDatas;
 
 /**
  * 手机端的图表服务
@@ -13,6 +13,6 @@ public interface ChartSarvice {
      * @param chartRequest
      * @return
      */
-    public ChartData getChartSerial(ChartRequest chartRequest);
+    public AxisDatas getChartSerial(ChartRequest chartRequest);
 
 }

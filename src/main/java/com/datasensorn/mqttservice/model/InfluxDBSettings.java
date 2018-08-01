@@ -10,7 +10,7 @@ public class InfluxDBSettings {
 
     private String database;
 
-    private String retentionpolicy;
+//    private String retentionpolicy;
 
     private String connecttimeout;
 
@@ -50,13 +50,13 @@ public class InfluxDBSettings {
         this.database = database;
     }
 
-    public String getRetentionpolicy() {
-        return retentionpolicy;
-    }
-
-    public void setRetentionpolicy(String retentionpolicy) {
-        this.retentionpolicy = retentionpolicy;
-    }
+//    public String getRetentionpolicy() {
+//        return retentionpolicy;
+//    }
+//
+//    public void setRetentionpolicy(String retentionpolicy) {
+//        this.retentionpolicy = retentionpolicy;
+//    }
 
     public String getConnecttimeout() {
         return connecttimeout;
@@ -82,12 +82,12 @@ public class InfluxDBSettings {
         this.timeout = timeout;
     }
 
-    public InfluxDBSettings(String influxdbURL, String username, String password, String database, String retentionpolicy, String connecttimeout, String readtimeout, String timeout) {
+    public InfluxDBSettings(String influxdbURL, String username, String password, String database,  String connecttimeout, String readtimeout, String timeout) {
         this.influxdbURL = influxdbURL;
         this.username = username;
         this.password = password;
         this.database = database;
-        this.retentionpolicy = retentionpolicy;
+//        this.retentionpolicy = retentionpolicy;
         this.connecttimeout = connecttimeout;
         this.readtimeout = readtimeout;
         this.timeout = timeout;

@@ -72,9 +72,10 @@ public class PushCallback implements MqttCallback {
                             .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue("device"))
                             .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString("value"))
                             .build();
-                    influxDB.write(service.getInfluxDBSettings().getDatabase(),
-                            service.getInfluxDBSettings().getRetentionpolicy(),
-                            p);
+                    influxDB.write(p);
+//                            .write(service.getInfluxDBSettings().getDatabase(),
+//                            service.getInfluxDBSettings().getRetentionpolicy(),
+//                            p);
                 }
 
             }

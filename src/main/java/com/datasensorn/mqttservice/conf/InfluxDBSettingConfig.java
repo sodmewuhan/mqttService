@@ -23,8 +23,8 @@ public class InfluxDBSettingConfig {
     @Value("${spring.influxdb.database}")
     private String database;
 
-    @Value("${spring.influxdb.retentionpolicy}")
-    private String retentionpolicy;
+//    @Value("${spring.influxdb.retentionpolicy}")
+//    private String retentionpolicy;
 
     @Value("${spring.influxdb.connecttimeout}")
     private String connecttimeout;
@@ -37,7 +37,6 @@ public class InfluxDBSettingConfig {
 
     @Bean
     public InfluxDBSettings influxDBSettings() {
-        return new InfluxDBSettings( influxdbURL, username, password,database,
-                retentionpolicy,connecttimeout,readtimeout,timeout);
+        return new InfluxDBSettings( influxdbURL, username, password,database,connecttimeout,readtimeout,timeout);
     }
 }

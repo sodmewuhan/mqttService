@@ -4,10 +4,9 @@ import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
 import com.datasensorn.mqttservice.model.InfluxDBSettings;
 import com.datasensorn.mqttservice.model.Request.ChartData;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
-import com.datasensorn.mqttservice.model.biz.ChartPoint;
+import com.datasensorn.mqttservice.model.biz.AxisDatas;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
 import com.datasensorn.mqttservice.service.ChartSarvice;
-import org.apache.commons.lang3.StringUtils;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -33,7 +33,7 @@ public class ChartSarviceImpl implements ChartSarvice {
     InfluxDBSettings influxDBSettings;
 
     @Override
-    public ChartData getChartSerial(ChartRequest chartRequest) {
+    public AxisDatas getChartSerial(ChartRequest chartRequest) {
         // 建立数据库的实例
         InfluxDB influxDB = influxDBUtil.getInfluxDB();
 
@@ -50,6 +50,9 @@ public class ChartSarviceImpl implements ChartSarvice {
 
         LOGGER.info("the database is " + query.getDatabase());
 
+        AxisDatas datas = new AxisDatas();
+        datas.setTitle("溶氧量");
+
         QueryResult results = influxDB.query(query);
         if (results != null && results.getResults()!=null && !results.getResults().isEmpty()) {
             //结果组装
@@ -60,30 +63,23 @@ public class ChartSarviceImpl implements ChartSarvice {
                 try {
                     for (int i=0; i < values.size(); i++) {
                         List<Object> objects = values.get(i);
-                        ChartPoint chartPoint = new ChartPoint();
                         //设置时间
                         String date = objects.get(0)==null ? "" : objects.get(0).toString();
-                        if (!StringUtils.isEmpty(date)) {
-                            chartPoint.setTime(sdf.parse(date));
+                        if (!org.springframework.util.StringUtils.isEmpty(date)) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(sdf.parse(date));
+                            String title = calendar.get(Calendar.DAY_OF_MONTH) + "日" +
+                                    calendar.get(Calendar.HOUR_OF_DAY)  + "点" + calendar.get(Calendar.MINUTE) + "分" ;
+                            datas.getxAxis().add(title);
                         } else {
                             continue;
                         }
-                        // 设置设备编号
-                        String boxid = objects.get(1)==null ? "" : objects.get(1).toString();
-                        if (!StringUtils.isEmpty(boxid)) {
-                            chartPoint.setBoxid(boxid);
-                        }
-                        // 设置探头
-                        String deviceid = objects.get(2)==null ? "" : objects.get(2).toString();
-                        if (!StringUtils.isEmpty(deviceid)) {
-                            chartPoint.setDeviceId(deviceid);
-                        }
+
                         //设置值
                         String value = objects.get(3) == null ? "" : objects.get(3).toString();
-                        if (!StringUtils.isEmpty(value)) {
-                            chartPoint.setValue(Float.valueOf(value));
+                        if (!org.springframework.util.StringUtils.isEmpty(value)) {
+                            datas.getyAxis().add(Float.valueOf(value));
                         }
-                        chartSerial.getPoints().add(chartPoint);
                     }
                 } catch (Exception e) {
                     LOGGER.error("parse data error ",e.getCause());
@@ -91,9 +87,8 @@ public class ChartSarviceImpl implements ChartSarvice {
             }
         }
 
-        ChartData data = new ChartData();
 
-        return data;
+        return datas;
     }
 }
 

@@ -1,7 +1,6 @@
 package com.datasensorn.mqttservice.controller.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.Serializable;
 

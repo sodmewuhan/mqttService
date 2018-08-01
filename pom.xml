@@ -119,6 +119,11 @@
             <version>2.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.miwurster</groupId>
+            <artifactId>spring-data-influxdb</artifactId>
+            <version>1.7</version>
+        </dependency>
     </dependencies>
 
     <build>
