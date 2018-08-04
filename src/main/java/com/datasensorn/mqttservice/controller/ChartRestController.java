@@ -4,7 +4,7 @@ import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.AxisDatas;
-import com.datasensorn.mqttservice.service.ChartSarvice;
+import com.datasensorn.mqttservice.service.ChartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ChartRestController {
     private final static Logger LOGGER = LoggerFactory.getLogger(ChartRestController.class);
 
     @Autowired
-    private ChartSarvice chartSarvice;
+    private ChartService chartSarvice;
 
     /**
      * 得到一天的数据

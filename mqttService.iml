@@ -82,5 +82,7 @@
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.14.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:logging-interceptor:3.10.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.miwurster:spring-data-influxdb:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bower:echarts:4.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery:3.3.1" level="project" />
   </component>
 </module>

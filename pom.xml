@@ -124,6 +124,18 @@
             <artifactId>spring-data-influxdb</artifactId>
             <version>1.7</version>
         </dependency>
+
+        <!-- webjar -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>echarts</artifactId>
+            <version>4.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.3.1</version>
+        </dependency>
     </dependencies>
 
     <build>

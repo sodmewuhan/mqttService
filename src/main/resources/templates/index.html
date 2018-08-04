@@ -1,9 +1,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>测试页面</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="webjars/jquery/3.3.1/jquery.js"></script>
+    <script type="text/javascript" src="webjars/echarts/4.0.4/dist/echarts.js"></script>
+    <script type="text/javascript" src="webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
+    <script type="text/javascript" src="./oxygenChart.js"></script>
+
+    <title>溶氧量曲线图</title>
 </head>
 <body>
-<p th:text="'Hello, ' + ${title}" /><br/>
+
+    <h1 style="text-align: center">溶氧量查看</h1>
+    <label for="days">查询天数</label> <input type="text" name="days" id="days"  />
+    <button type="button" name="query_btn" id="query_btn">查询</button>
+    <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
 </body>
+
 </html>
