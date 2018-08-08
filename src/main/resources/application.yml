@@ -14,6 +14,10 @@ application:
     password: password
     timeout:  10
     heartbeat:  20
+  weather:
+    AppCode:  e16633309c1940cd8170272912e54a12
+    host: http://ali-weather.showapi.com
+    path: /hour24
 
 spring:
 #mysql 数据库

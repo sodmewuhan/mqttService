@@ -23,7 +23,7 @@ public class MiddlewareMqttClient {
     private MqttSettings mqttSettings;
 
     @Autowired
-   private InfluxDBSettings influxDBSettings;
+    private InfluxDBSettings influxDBSettings;
 
     @Autowired
     private InfluxDBUtil influxDBUtil;
