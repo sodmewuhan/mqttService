@@ -3,7 +3,8 @@ package com.datasensorn.mqttservice.service;
 import com.datasensorn.mqttservice.model.biz.WeatherInfo;
 
 /**
- * 集成第三方服务
+ * 集成第三方服务 包括有：{天气预报}
+ *
  */
 public interface ThirdPartService {
 

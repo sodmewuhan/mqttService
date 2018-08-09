@@ -33,7 +33,7 @@ public class MqttPublishingSchedular {
     @Autowired
     ThirdPartService thirdPartService;
 
-    @Scheduled( fixedRateString = "${application.scheduler.rate}" )
+    //@Scheduled( fixedRateString = "${application.scheduler.rate}" )
     public void scheduledMqttPublishingTask() throws MqttPersistenceException, MqttException {
 
         WeatherInfo weatherInfo = thirdPartService.getWeatherInfo();
