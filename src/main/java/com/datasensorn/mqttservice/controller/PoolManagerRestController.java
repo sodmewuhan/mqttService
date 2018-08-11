@@ -51,4 +51,14 @@ public class PoolManagerRestController {
 
         return resultGenerator.genSuccessResult(poolCurrentStatus);
     }
+
+    @PostMapping("device/{deviceId}")
+    public Result controllDevice(@PathVariable("deviceId") String deviceId) {
+        LOGGER.info("Get the deviceId is " + deviceId);
+
+        ResultGenerator resultGenerator = new ResultGenerator();
+        //PoolCurrentStatus poolCurrentStatus = poolService.getCurrentStatus(boxid);
+
+        return resultGenerator.genSuccessResult(null);
+    }
 }

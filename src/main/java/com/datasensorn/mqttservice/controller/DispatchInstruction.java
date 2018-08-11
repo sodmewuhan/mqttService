@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 向盒子下发指令
  */
 @RestController
-@RequestMapping("/app/dispatch")
+@RequestMapping("/api/dispatch")
 public class DispatchInstruction {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DispatchInstruction.class);
