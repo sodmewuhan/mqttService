@@ -1,12 +1,18 @@
 package com.datasensorn.mqttservice.controller.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 /**
  * 指令对象
  */
+@Getter
+@Setter
+@EqualsAndHashCode
 public class InstructionObject implements Serializable {
 
     @JSONField(serialize = false)
@@ -14,29 +20,6 @@ public class InstructionObject implements Serializable {
 
     private String deviceId;// 设备的探头ID
 
-    private Boolean onOff;  //设备开关
+    private String action;  //设备开关
 
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public Boolean getOnOff() {
-        return onOff;
-    }
-
-    public void setOnOff(Boolean onOff) {
-        this.onOff = onOff;
-    }
 }
