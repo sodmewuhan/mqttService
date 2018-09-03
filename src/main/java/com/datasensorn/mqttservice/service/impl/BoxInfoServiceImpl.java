@@ -6,6 +6,8 @@ import com.datasensorn.mqttservice.exception.ServiceException;
 import com.datasensorn.mqttservice.model.MqttSettings;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 import com.datasensorn.mqttservice.model.biz.BoxInfoMapper;
+import com.datasensorn.mqttservice.model.biz.BoxStatus;
+import com.datasensorn.mqttservice.model.biz.mapper.BoxStatusMapper;
 import com.datasensorn.mqttservice.mqtt.MiddlewareMqttClient;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,9 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
     @Autowired
     private MqttSettings mqttSettings;
+
+    @Autowired
+    private BoxStatusMapper boxStatusMapper;
 
     @Override
     public int addBoxInfo(BoxInfo boxInfo) throws ServiceException {
@@ -60,5 +65,17 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
         String message =  JSON.toJSONString(instructionObject);
         middlewareMqttClient.publishMessage(sendTopic, message);
+    }
+
+    @Override
+    public void updateBoxStatus(BoxStatus boxStatus) throws ServiceException {
+
+        int boxDeviceNumber = boxStatusMapper.checkBoxDevice(boxStatus);
+        if (boxDeviceNumber > 0) {
+            boxStatusMapper.updateBoxDevice(boxStatus);
+        } else {
+
+            boxStatusMapper.addBoxStatus(boxStatus);
+        }
     }
 }

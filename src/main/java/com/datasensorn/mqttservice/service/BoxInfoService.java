@@ -3,6 +3,7 @@ package com.datasensorn.mqttservice.service;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
 import com.datasensorn.mqttservice.exception.ServiceException;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
+import com.datasensorn.mqttservice.model.biz.BoxStatus;
 
 /**
  * 盒子服务
@@ -30,4 +31,11 @@ public interface BoxInfoService {
      * @throws Exception
      */
     public void publishMessage(InstructionObject instructionObject) throws Exception;
+
+    /**
+     * 更新盒子状态
+     * @param boxStatus
+     * @throws ServiceException
+     */
+    public void updateBoxStatus(BoxStatus boxStatus) throws ServiceException;
 }

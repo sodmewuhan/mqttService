@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.datasensorn.mqttservice.Utils.Constant;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -11,8 +12,6 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +21,11 @@ public class PushCallback implements MqttCallback {
 
     private MiddlewareMqttClient service;
 
+    private final static String VALUE = "value";
+
+    private final static String STATE = "state";
+
+    private final static String DEVICE = "device";
     public PushCallback() {
     }
 
@@ -63,19 +67,23 @@ public class PushCallback implements MqttCallback {
                 String msg = new String(message.getPayload());
                 if (isValidJSON(msg)) {
                     JSONObject jsonObject = JSON.parseObject(msg);
-                    //保存至数据库中
-                    InfluxDB influxDB = service.getInfluxDBUtil().getInfluxDB();
+                    //设备上传水质情况
+                   if (StringUtils.contains(msg,VALUE)) {
+                        //保存至influxdb数据库中
+                        InfluxDB influxDB = service.getInfluxDBUtil().getInfluxDB();
 //                    // measurement 数据库中的表  point 数据库中的记录
-                    final Point p = Point.measurement(Constant.INFLUXDB_NAME)
-                            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                            .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
-                            .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue("device"))
-                            .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString("value"))
-                            .build();
-                    influxDB.write(p);
-//                            .write(service.getInfluxDBSettings().getDatabase(),
-//                            service.getInfluxDBSettings().getRetentionpolicy(),
-//                            p);
+                        final Point p = Point.measurement(Constant.INFLUXDB_NAME)
+                                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                                .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
+                                .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE))
+                                .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
+                                .build();
+                        influxDB.write(p);
+                    } else if (StringUtils.contains(msg,STATE)) {
+                        // 上传当前的设备状态，保存到MySQL数据库 。
+                       String boxId = topics[1];
+
+                   }
                 }
 
             }
