@@ -4,14 +4,14 @@ import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.exception.ServiceException;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
+import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 盒子管理接口
@@ -65,4 +65,16 @@ public class BoxMangeRestControll {
             return resultGenerator.genFailResult(e.getMessage());
         }
     }
+
+    /**
+     * 得到盒子下面的所有设备的当前状态（增氧机，投饵机等）
+     */
+    @RequestMapping(value = "/getBoxStatus", method = RequestMethod.POST)
+    public Result getBoxStatus(@RequestParam(value = "boxId", required = true)String boxId) {
+
+        List<BoxStatus> boxStatus = boxInfoService.getBoxStatus(boxId);
+        ResultGenerator resultGenerator = new ResultGenerator();
+        return resultGenerator.genSuccessResult(boxStatus);
+    }
+
 }

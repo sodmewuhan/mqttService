@@ -5,6 +5,8 @@ import com.datasensorn.mqttservice.exception.ServiceException;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 import com.datasensorn.mqttservice.model.biz.BoxStatus;
 
+import java.util.List;
+
 /**
  * 盒子服务
  */
@@ -38,4 +40,11 @@ public interface BoxInfoService {
      * @throws ServiceException
      */
     public void updateBoxStatus(BoxStatus boxStatus) throws ServiceException;
+
+    /**
+     * 根据盒子的ID编号
+     * @param boxId
+     * @return
+     */
+    public List<BoxStatus> getBoxStatus(String boxId);
 }

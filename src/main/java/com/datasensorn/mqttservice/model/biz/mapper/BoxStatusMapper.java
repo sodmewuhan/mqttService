@@ -34,7 +34,7 @@ public interface BoxStatusMapper {
      * @param boxStatus
      * @return
      */
-    @Select("select * from t_box_status where boxNumber = #{boxNumber} and deviceId=#{deviceId}")
+    @Select("select * from t_box_status where boxNumber = #{boxNumber}")
     public List<BoxStatus> getBoxDevice(BoxStatus boxStatus);
 
     @Update("update t_box_status set status = #{status}")

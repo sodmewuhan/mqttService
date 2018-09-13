@@ -3,18 +3,20 @@ package com.datasensorn.mqttservice.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
 import com.datasensorn.mqttservice.exception.ServiceException;
-import com.datasensorn.mqttservice.model.MqttSettings;
+
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 import com.datasensorn.mqttservice.model.biz.BoxInfoMapper;
 import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.model.biz.mapper.BoxStatusMapper;
-import com.datasensorn.mqttservice.mqtt.MiddlewareMqttClient;
+
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BoxInfoServiceImpl implements BoxInfoService {
@@ -23,13 +25,6 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
     @Autowired
     private BoxInfoMapper boxInfoMapper;
-
-    @Autowired
-    private MiddlewareMqttClient middlewareMqttClient;
-
-    @Autowired
-    private MqttSettings mqttSettings;
-
     @Autowired
     private BoxStatusMapper boxStatusMapper;
 
@@ -60,11 +55,11 @@ public class BoxInfoServiceImpl implements BoxInfoService {
     @Override
     public void publishMessage(InstructionObject instructionObject) throws Exception {
 
-        String[] topics = mqttSettings.getTopic().split("/");
-        String sendTopic = topics[0] + "/" + instructionObject.getTopic();
-
-        String message =  JSON.toJSONString(instructionObject);
-        middlewareMqttClient.publishMessage(sendTopic, message);
+//        String[] topics = mqttSettings.getTopic().split("/");
+//        String sendTopic = topics[0] + "/" + instructionObject.getTopic();
+//
+//        String message =  JSON.toJSONString(instructionObject);
+//        middlewareMqttClient.publishMessage(sendTopic, message);
     }
 
     @Override
@@ -74,8 +69,13 @@ public class BoxInfoServiceImpl implements BoxInfoService {
         if (boxDeviceNumber > 0) {
             boxStatusMapper.updateBoxDevice(boxStatus);
         } else {
-
             boxStatusMapper.addBoxStatus(boxStatus);
         }
+    }
+
+    @Override
+    public List<BoxStatus> getBoxStatus(String boxId) {
+        BoxStatus boxStatus = new BoxStatus(boxId,null,null);
+        return boxStatusMapper.getBoxDevice(boxStatus);
     }
 }

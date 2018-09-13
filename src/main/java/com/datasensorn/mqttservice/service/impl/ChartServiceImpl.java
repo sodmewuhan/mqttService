@@ -37,6 +37,7 @@ public class ChartServiceImpl implements ChartService {
 
     private static final String BOX_ID = "15919829955";
 
+    private static final Integer TEN = 10;
     @Override
     public AxisDatas getChartSerial(ChartRequest chartRequest) {
         // 建立数据库的实例
@@ -83,7 +84,8 @@ public class ChartServiceImpl implements ChartService {
                         //设置值
                         String value = objects.get(3) == null ? "" : objects.get(3).toString();
                         if (!org.springframework.util.StringUtils.isEmpty(value)) {
-                            datas.getyAxis().add(Float.valueOf(value));
+                            //TODO 值要除以10
+                            datas.getyAxis().add(Float.valueOf(value) / TEN);
                         }
                     }
                 } catch (Exception e) {

@@ -13,15 +13,21 @@ public class BoxStatus {
     /**
      * 盒子编号
      */
-    private Integer boxNumber;
+    private String boxNumber;
 
     /**
      * 设备ID
      */
-    private Integer deviceId;
+    private String deviceId;
 
     /**
      * 设备状态：0 关闭； 1 打开
      */
-    private Integer status;
+    private String status;
+
+    public BoxStatus(String boxNumber, String deviceId, String status) {
+        this.boxNumber = boxNumber;
+        this.deviceId = deviceId;
+        this.status = status;
+    }
 }

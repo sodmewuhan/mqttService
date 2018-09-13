@@ -6,10 +6,12 @@ application:
   scheduler:
     rate: 5000
   mqtt:
-    host: tcp://101.37.146.78:61613
-    publisher:  sodmewuhan-publisher
-    subscriber: sodmewuhan-subscriber
-    topic:  fish/#
+    hostUrl: tcp://101.37.146.78:61613
+#    publisher:  sodmewuhan-publisher
+#    subscriber: sodmewuhan-subscriber
+    client:
+      id: ${random.value}
+    topic: fish/#
     username: admin
     password: password
     timeout:  10
