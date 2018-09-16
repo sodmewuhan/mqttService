@@ -20,7 +20,7 @@ import java.util.List;
  * 鱼塘与探头绑定
  */
 @RestController
-@RequestMapping(value="/app/box")
+@RequestMapping(value="/api/box")
 public class BoxMangeRestControll {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BoxMangeRestControll.class);
@@ -70,11 +70,12 @@ public class BoxMangeRestControll {
      * 得到盒子下面的所有设备的当前状态（增氧机，投饵机等）
      */
     @RequestMapping(value = "/getBoxStatus", method = RequestMethod.POST)
-    public Result getBoxStatus(@RequestParam(value = "boxId", required = true)String boxId) {
+    public Result getBoxStatus(String boxId) {
 
         List<BoxStatus> boxStatus = boxInfoService.getBoxStatus(boxId);
         ResultGenerator resultGenerator = new ResultGenerator();
         return resultGenerator.genSuccessResult(boxStatus);
+
     }
 
 }
