@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.DeviceStatusLogMapper" >
+  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.DeviceStatusLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="log_time" property="logTime" jdbcType="TIMESTAMP" />
+    <result column="box_id" property="boxId" jdbcType="INTEGER" />
+    <result column="device_id" property="deviceId" jdbcType="INTEGER" />
+    <result column="action" property="action" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, log_time, box_id, device_id, action
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_device_status_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_device_status_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.DeviceStatusLog" >
+    insert into t_device_status_log (id, log_time, box_id, 
+      device_id, action)
+    values (#{id,jdbcType=INTEGER}, #{logTime,jdbcType=TIMESTAMP}, #{boxId,jdbcType=INTEGER}, 
+      #{deviceId,jdbcType=INTEGER}, #{action,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceStatusLog" >
+    insert into t_device_status_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="logTime != null" >
+        log_time,
+      </if>
+      <if test="boxId != null" >
+        box_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="action != null" >
+        action,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="logTime != null" >
+        #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="boxId != null" >
+        #{boxId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="action != null" >
+        #{action,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceStatusLog" >
+    update t_device_status_log
+    <set >
+      <if test="logTime != null" >
+        log_time = #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="boxId != null" >
+        box_id = #{boxId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="action != null" >
+        action = #{action,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.DeviceStatusLog" >
+    update t_device_status_log
+    set log_time = #{logTime,jdbcType=TIMESTAMP},
+      box_id = #{boxId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=INTEGER},
+      action = #{action,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -33,7 +33,7 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+//        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
     }
     /**
      * Load the Spring Integration Application Context

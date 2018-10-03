@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.datasensorn.mqttservice.Utils.Constant;
+import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
 import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.service.BoxInfoService;
@@ -35,7 +36,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
 
     private final static String STATE = "state";
 
-    private final static String DEVICE = "device";
+    private final static String DEVICE = "deviceId";
 
     @Override
     public void handleMsg(Message<?> message) {
@@ -62,13 +63,19 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                                     .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
                                     .build();
                             influxDB.write(p);
+                            // 更新到数据库中
+                            Integer deviceId = Integer.valueOf(jsonObject.getIntValue(DEVICE)) - 10;
+                            BoxStatusDTO boxStatusDTO = new BoxStatusDTO();
+                            boxStatusDTO.setBoxnumber(topics[1]);
+                            boxStatusDTO.setDeviceid(deviceId.toString());
+                            boxStatusDTO.setStatus(jsonObject.getString(VALUE));
+                            boxInfoService.setBoxStatus(boxStatusDTO);
                         } else if (StringUtils.contains(msg,STATE)) {
                             // 上传当前的设备状态，保存到MySQL数据库 。
                             String boxId = topics[1];
                             String deviceId = jsonObject.get("deviceId")==null ? null :jsonObject.get("deviceId").toString();
                             String state = jsonObject.get("state")==null ? null :jsonObject.get("state").toString();
-//                            BoxStatus boxStatus = new BoxStatus(boxId,deviceId ,state);
-//                            boxInfoService.updateBoxStatus(boxStatus);
+
                         }
                     }
                 }

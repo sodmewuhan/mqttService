@@ -3,7 +3,6 @@ package com.datasensorn.mqttservice.controller;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.exception.ServiceException;
-import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
 import com.datasensorn.mqttservice.service.BoxInfoService;
@@ -78,10 +77,16 @@ public class BoxMangeRestControll {
         return resultGenerator.genSuccessResult(boxStatusDTO);
     }
 
+    /**
+     *
+     * @param boxStatusDTO
+     * @return
+     */
     @RequestMapping(value = "/setBoxStatus", method = RequestMethod.POST)
     @ResponseBody
     public Result setBoxStatus(@RequestBody BoxStatusDTO boxStatusDTO) {
         ResultGenerator resultGenerator = new ResultGenerator();
+        boxInfoService.setBoxStatus(boxStatusDTO);
         return resultGenerator.genSuccessResult();
     }
 }
