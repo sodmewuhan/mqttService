@@ -1,7 +1,10 @@
 package com.datasensorn.mqttservice.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.datasensorn.mqttservice.controller.model.DeviceMessage;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
+import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.exception.ServiceException;
 
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
@@ -9,11 +12,15 @@ import com.datasensorn.mqttservice.model.biz.BoxInfoMapper;
 import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.model.biz.mapper.BoxStatusMapper;
 
+import com.datasensorn.mqttservice.mqtt.MqttGateway;
 import com.datasensorn.mqttservice.service.BoxInfoService;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +32,12 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
     @Autowired
     private BoxInfoMapper boxInfoMapper;
+
     @Autowired
     private BoxStatusMapper boxStatusMapper;
+
+    @Autowired
+    private MqttGateway mqttGateway;
 
     @Override
     public int addBoxInfo(BoxInfo boxInfo) throws ServiceException {
@@ -54,28 +65,30 @@ public class BoxInfoServiceImpl implements BoxInfoService {
 
     @Override
     public void publishMessage(InstructionObject instructionObject) throws Exception {
-
-//        String[] topics = mqttSettings.getTopic().split("/");
-//        String sendTopic = topics[0] + "/" + instructionObject.getTopic();
-//
-//        String message =  JSON.toJSONString(instructionObject);
-//        middlewareMqttClient.publishMessage(sendTopic, message);
+        // 发送消息 json串
+        DeviceMessage deviceMessage = new DeviceMessage();
+        deviceMessage.setDeviceId(instructionObject.getDeviceId());
+        deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
+        mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
     }
 
-    @Override
-    public void updateBoxStatus(BoxStatus boxStatus) throws ServiceException {
 
-        int boxDeviceNumber = boxStatusMapper.checkBoxDevice(boxStatus);
-        if (boxDeviceNumber > 0) {
-            boxStatusMapper.updateBoxDevice(boxStatus);
-        } else {
-            boxStatusMapper.addBoxStatus(boxStatus);
+    @Override
+    public List<BoxStatusDTO> getBoxStatus(String boxNumber) {
+        List<BoxStatusDTO> lists = Lists.newArrayList();
+        List<BoxStatus> boxStatuses = boxStatusMapper.selectByBoxId(boxNumber);
+        for(BoxStatus boxStatus :boxStatuses) {
+            BoxStatusDTO boxStatusDTO = new BoxStatusDTO();
+            BeanUtils.copyProperties(boxStatus,boxStatusDTO);
+            lists.add(boxStatusDTO);
         }
+        return lists;
     }
 
     @Override
-    public List<BoxStatus> getBoxStatus(String boxId) {
-        BoxStatus boxStatus = new BoxStatus(boxId,null,null);
-        return boxStatusMapper.getBoxDevice(boxStatus);
+    public void setBoxStatus(BoxStatusDTO boxStatusDTO) {
+        BoxStatus boxStatus = new BoxStatus();
+        BeanUtils.copyProperties(boxStatusDTO,boxStatus);
+        boxStatusMapper.updateByBoxNumber(boxStatus);
     }
 }

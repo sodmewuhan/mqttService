@@ -8,7 +8,7 @@ public class Constant {
     /**
      * mqtt 的前缀
      */
-    public static final String MQTT_PREFIX = "fish/";
+    public static final String MQTT_PREFIX = "UP/";
 
     /**
      * influxdb的measurement名字
@@ -30,5 +30,7 @@ public class Constant {
      */
     public static final String INFLUXDB_COL_VALUE = "value";
 
+    public static  final String ZERO = "0";
 
+    public static final String ONE = "1";
 }

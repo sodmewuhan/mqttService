@@ -1,33 +1,43 @@
 package com.datasensorn.mqttservice.model.biz;
 
-import lombok.Data;
-
-/**
- * 设备状态
- */
-@Data
 public class BoxStatus {
-
     private Integer id;
 
-    /**
-     * 盒子编号
-     */
-    private String boxNumber;
+    private String boxnumber;
 
-    /**
-     * 设备ID
-     */
-    private String deviceId;
+    private String deviceid;
 
-    /**
-     * 设备状态：0 关闭； 1 打开
-     */
     private String status;
 
-    public BoxStatus(String boxNumber, String deviceId, String status) {
-        this.boxNumber = boxNumber;
-        this.deviceId = deviceId;
-        this.status = status;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBoxnumber() {
+        return boxnumber;
+    }
+
+    public void setBoxnumber(String boxnumber) {
+        this.boxnumber = boxnumber == null ? null : boxnumber.trim();
+    }
+
+    public String getDeviceid() {
+        return deviceid;
+    }
+
+    public void setDeviceid(String deviceid) {
+        this.deviceid = deviceid == null ? null : deviceid.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 }

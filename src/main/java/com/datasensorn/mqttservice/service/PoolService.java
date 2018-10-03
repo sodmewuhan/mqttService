@@ -9,14 +9,6 @@ import com.datasensorn.mqttservice.model.biz.PoolCurrentStatus;
 public interface PoolService {
 
     /**
-     * 添加鱼塘
-     * @param fishpondInfo
-     * @return
-     */
-    @Deprecated
-    public int addFishpond(FishpondInfo fishpondInfo);
-
-    /**
      * 根据盒子ID，得到当前盒子上报指标信息
      * @param boxid
      */

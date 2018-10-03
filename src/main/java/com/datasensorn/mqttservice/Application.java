@@ -15,6 +15,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 /**
  * spring boot 启动类
  */
@@ -28,6 +31,10 @@ public class Application extends SpringBootServletInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+    @PostConstruct
+    void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+    }
     /**
      * Load the Spring Integration Application Context
      *
@@ -36,7 +43,6 @@ public class Application extends SpringBootServletInitializer {
     public static void main(final String... args) {
 
         SpringApplication.run(Application.class, args);
-
         LOGGER.info("Service is started!");
 
     }

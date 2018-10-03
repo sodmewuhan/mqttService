@@ -22,19 +22,6 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-//    /**
-//     * 新用户注册
-//     * @return
-//     */
-//    @RequestMapping(value = "/register", method = RequestMethod.POST)
-//    public Result register(@RequestBody User user) {
-//
-//        userService.registerUser(user);
-//
-//        ResultGenerator resultGenerator = new ResultGenerator();
-//        return resultGenerator.genSuccessResult();
-//    }
-
     /**
      * 用户登录
      * @return

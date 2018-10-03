@@ -44,7 +44,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         } else {
             try {
                 String topic = String.valueOf(message.getHeaders().get("mqtt_topic"));
-                if (topic.contains("fish/")) {
+                if (topic.contains(Constant.MQTT_PREFIX)) {
                     //如果是上报数据
                     String[] topics = topic.split(Constant.MQTT_PREFIX);
                     String msg = String.valueOf(message.getPayload());
@@ -67,8 +67,8 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                             String boxId = topics[1];
                             String deviceId = jsonObject.get("deviceId")==null ? null :jsonObject.get("deviceId").toString();
                             String state = jsonObject.get("state")==null ? null :jsonObject.get("state").toString();
-                            BoxStatus boxStatus = new BoxStatus(boxId,deviceId ,state);
-                            boxInfoService.updateBoxStatus(boxStatus);
+//                            BoxStatus boxStatus = new BoxStatus(boxId,deviceId ,state);
+//                            boxInfoService.updateBoxStatus(boxStatus);
                         }
                     }
                 }

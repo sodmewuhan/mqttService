@@ -15,11 +15,11 @@ public interface ChartService {
      */
     public AxisDatas getChartSerial(ChartRequest chartRequest);
 
-    /**
-     * 查询溶氧量
-     * @param days 多少天之前
-     * @return
-     */
-    public AxisDatas getOxygenData(int days) ;
+//    /**
+//     * 查询溶氧量
+//     * @param days 多少天之前
+//     * @return
+//     */
+//    public AxisDatas getOxygenData(int days) ;
 
 }

@@ -1,10 +1,11 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
+import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.exception.ServiceException;
+import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.BoxInfo;
-import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,13 +70,18 @@ public class BoxMangeRestControll {
     /**
      * 得到盒子下面的所有设备的当前状态（增氧机，投饵机等）
      */
-    @RequestMapping(value = "/getBoxStatus", method = RequestMethod.POST)
-    public Result getBoxStatus(String boxId) {
-
-        List<BoxStatus> boxStatus = boxInfoService.getBoxStatus(boxId);
+    @RequestMapping(value = "/getBoxStatus/{boxId}", method = RequestMethod.GET)
+    public Result getBoxStatus(@PathVariable("boxId") String boxId) {
+        LOGGER.info("begin called the function getBoxStatus");
+        List<BoxStatusDTO> boxStatusDTO = boxInfoService.getBoxStatus(boxId);
         ResultGenerator resultGenerator = new ResultGenerator();
-        return resultGenerator.genSuccessResult(boxStatus);
-
+        return resultGenerator.genSuccessResult(boxStatusDTO);
     }
 
+    @RequestMapping(value = "/setBoxStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public Result setBoxStatus(@RequestBody BoxStatusDTO boxStatusDTO) {
+        ResultGenerator resultGenerator = new ResultGenerator();
+        return resultGenerator.genSuccessResult();
+    }
 }
