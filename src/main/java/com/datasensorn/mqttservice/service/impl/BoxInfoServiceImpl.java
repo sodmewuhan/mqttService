@@ -65,12 +65,16 @@ public class BoxInfoServiceImpl implements BoxInfoService {
     @Override
     public void publishMessage(InstructionObject instructionObject) throws Exception {
         // 发送消息 json串
-        DeviceMessage deviceMessage = new DeviceMessage();
-        deviceMessage.setDeviceId(instructionObject.getDeviceId());
-        deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
-        mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
+        try {
+            DeviceMessage deviceMessage = new DeviceMessage();
+            deviceMessage.setDeviceId(Integer.valueOf(instructionObject.getDeviceId()));
+            deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
+            mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
+            LOGGER.info(JSON.toJSONString(deviceMessage));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e);
+        }
     }
-
 
     @Override
     public List<BoxStatusDTO> getBoxStatus(String boxNumber) {

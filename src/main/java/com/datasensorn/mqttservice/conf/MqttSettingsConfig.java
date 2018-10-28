@@ -10,11 +10,16 @@ import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessageProducer;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.core.Pollers;
+import org.springframework.integration.endpoint.MessageProducerSupport;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
+import org.springframework.integration.stream.CharacterStreamReadingMessageSource;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -45,8 +50,20 @@ public class MqttSettingsConfig {
     @Value("${application.mqtt.heartbeat}")
     private Integer heartbeat;
 
-    @Value("${application.mqtt.client.id}")
-    private String clientId;
+    @Value("${application.mqtt.client.inBoundId}")
+    private String inBoundId;
+
+    @Value("${application.mqtt.client.outBoundId}")
+    private String outBoundId;
+
+    @Bean
+    public IntegrationFlow mqttOutFlow() {
+        return IntegrationFlows.from(CharacterStreamReadingMessageSource.stdin(),
+                e -> e.poller(Pollers.fixedDelay(1000)))
+                .transform(p -> p + " sent to MQTT")
+                .handle(mqttOutbound())
+                .get();
+    }
 
     @Bean
     public MqttConnectOptions getMqttConnectOptions() {
@@ -54,7 +71,7 @@ public class MqttSettingsConfig {
         mqttConnectOptions.setUserName(username);
         mqttConnectOptions.setPassword(password.toCharArray());
         mqttConnectOptions.setServerURIs(new String[]{mqttHostUrl});
-        mqttConnectOptions.setKeepAliveInterval(2);
+        mqttConnectOptions.setKeepAliveInterval(60*60*24);
         return mqttConnectOptions;
     }
     @Bean
@@ -67,7 +84,7 @@ public class MqttSettingsConfig {
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
-        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(clientId, mqttClientFactory());
+        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(outBoundId, mqttClientFactory());
         messageHandler.setAsync(true);
         messageHandler.setDefaultTopic(mqttTopic);
         return messageHandler;
@@ -90,7 +107,7 @@ public class MqttSettingsConfig {
         MqttPahoMessageDrivenChannelAdapter adapter =
                 new MqttPahoMessageDrivenChannelAdapter(
                         mqttHostUrl,
-                        clientId,
+                        inBoundId,
                         mqttClientFactory(),
                         mqttTopic);
         adapter.setCompletionTimeout(5000);
@@ -115,4 +132,5 @@ public class MqttSettingsConfig {
             }
         };
     }
+
 }

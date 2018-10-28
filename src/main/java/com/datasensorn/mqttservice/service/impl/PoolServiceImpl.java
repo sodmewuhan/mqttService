@@ -2,7 +2,6 @@ package com.datasensorn.mqttservice.service.impl;
 
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
 import com.datasensorn.mqttservice.model.InfluxDBSettings;
-import com.datasensorn.mqttservice.model.biz.FishpondInfo;
 import com.datasensorn.mqttservice.model.biz.PoolCurrentStatus;
 import com.datasensorn.mqttservice.service.PoolService;
 import org.influxdb.InfluxDB;
@@ -37,6 +36,9 @@ public class PoolServiceImpl implements PoolService {
 
         command.append("SELECT * FROM fish WHERE boxid = ")
                 .append("\'").append(boxid).append("\'")
+                .append(" and (")
+                .append(" deviceId =0 or  deviceId = 1 or deviceId = 2 or deviceId = 3" )
+                .append(" )")
                 .append(" order by ")
                 .append(" time")
                 .append(" DESC")

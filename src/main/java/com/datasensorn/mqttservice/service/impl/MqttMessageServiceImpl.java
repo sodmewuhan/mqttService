@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.datasensorn.mqttservice.Utils.Constant;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
-import com.datasensorn.mqttservice.model.biz.BoxStatus;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import com.datasensorn.mqttservice.service.MqttMessageService;
 import org.apache.commons.lang3.StringUtils;

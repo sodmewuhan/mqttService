@@ -33,4 +33,9 @@ public class Constant {
     public static  final String ZERO = "0";
 
     public static final String ONE = "1";
+
+    public static final String APP_NAME = "fishtech.apk";
+
+    /** APP 文件大小的限制，限制在20M之内 */
+    public static final Integer APP_FILELENGTH = 20 * 1024 * 1024;
 }

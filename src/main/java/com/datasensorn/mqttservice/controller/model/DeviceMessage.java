@@ -4,15 +4,15 @@ package com.datasensorn.mqttservice.controller.model;
  * 设备下发消息
  */
 public class DeviceMessage {
-    private String deviceId;
+    private Integer deviceId;
 
     private Integer action ;
 
-    public String getDeviceId() {
+    public Integer getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(String deviceId) {
+    public void setDeviceId(Integer deviceId) {
         this.deviceId = deviceId;
     }
 

@@ -29,7 +29,7 @@ public class ResultGenerator {
     public Result genFailResult(String message) {
         Result ret = new Result();
         ret.setCode(ResultCode.FAIL.code);
-
+        ret.setMessage(message);
         return ret;
     }
 }

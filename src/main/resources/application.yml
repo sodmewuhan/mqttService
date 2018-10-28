@@ -8,16 +8,19 @@ application:
   mqtt:
     hostUrl: tcp://101.37.146.78:61613
     client:
-      id: ${random.value}
+      inBoundId: ${random.value}
+      outBoundId:  ${random.value}
     topic: UP/#
     username: admin
     password: password
     timeout:  10
-    heartbeat:  20
+    heartbeat:  10
   weather:
     AppCode:  e16633309c1940cd8170272912e54a12
     host: http://ali-weather.showapi.com
     path: /hour24
+# APK 下载升级管理相关配置
+  storeFilePath:  appFile/store
 
 spring:
 #mysql 数据库
