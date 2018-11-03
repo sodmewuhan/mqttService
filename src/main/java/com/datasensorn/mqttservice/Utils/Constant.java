@@ -11,9 +11,11 @@ public class Constant {
     public static final String MQTT_PREFIX = "UP/";
 
     /**
-     * influxdb的measurement名字
+     * influxdb的measurement名字  池塘的水质情况
      */
-    public static final String INFLUXDB_NAME = "fish";
+    public static final String INFLUXDB_NAME_FISH = "fish";
+
+    public static final String INFLUXDB_NAME_DEVICE = "device";
 
     /**
      * influxdb 列名 ： boxid

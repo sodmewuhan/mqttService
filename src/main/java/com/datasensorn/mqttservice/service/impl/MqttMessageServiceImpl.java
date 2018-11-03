@@ -8,7 +8,6 @@ import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import com.datasensorn.mqttservice.service.MqttMessageService;
-import org.apache.commons.lang3.StringUtils;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
@@ -48,33 +47,16 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                     //如果是上报数据
                     String[] topics = topic.split(Constant.MQTT_PREFIX);
                     String msg = String.valueOf(message.getPayload());
+                    LOGGER.info("***************the receive message is " + msg);
                     if (isValidJSON(msg)) {
                         JSONObject jsonObject = JSON.parseObject(msg);
-                        //设备上传水质情况
-                        if (StringUtils.contains(msg,VALUE)) {
-                            //保存至influxdb数据库中
-                            InfluxDB influxDB = influxDBUtil.getInfluxDB();
-                            // measurement 数据库中的表  point 数据库中的记录
-                            final Point p = Point.measurement(Constant.INFLUXDB_NAME)
-                                    .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                                    .addField(Constant.INFLUXDB_COL_BOXID,topics[1])
-                                    .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE))
-                                    .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
-                                    .build();
-                            influxDB.write(p);
-                            // 更新到数据库中
-                            Integer deviceId = Integer.valueOf(jsonObject.getIntValue(DEVICE)) - 10;
-                            BoxStatusDTO boxStatusDTO = new BoxStatusDTO();
-                            boxStatusDTO.setBoxnumber(topics[1]);
-                            boxStatusDTO.setDeviceid(deviceId.toString());
-                            boxStatusDTO.setStatus(jsonObject.getString(VALUE));
-                            boxInfoService.setBoxStatus(boxStatusDTO);
-                        } else if (StringUtils.contains(msg,STATE)) {
-                            // 上传当前的设备状态，保存到MySQL数据库 。
-                            String boxId = topics[1];
-                            String deviceId = jsonObject.get("deviceId")==null ? null :jsonObject.get("deviceId").toString();
-                            String state = jsonObject.get("state")==null ? null :jsonObject.get("state").toString();
-
+                        if (jsonObject.getIntValue(DEVICE) < 10) {
+                            // TODO 保存上传的水质数据
+                            savePoolStatusToInfluxdb(topics[1], jsonObject);
+                        } else {
+                            // TODO 保存上传的设备数据
+                            saveDeviceStatusToInfluxdb(topics[1], jsonObject);
+                            saveDeviceStatusToDB(topics[1],jsonObject);
                         }
                     }
                 }
@@ -84,7 +66,41 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         }
     }
 
+    private void savePoolStatusToInfluxdb(String topic, JSONObject jsonObject) {
+        InfluxDB influxDB = influxDBUtil.getInfluxDB();
+        // measurement 数据库中的表  point 数据库中的记录
+        final Point p = Point.measurement(Constant.INFLUXDB_NAME_FISH)
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField(Constant.INFLUXDB_COL_BOXID, topic)
+                .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE))
+                .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
+                .build();
+        influxDB.write(p);
+        LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
+    }
+    private void saveDeviceStatusToInfluxdb(String topic,JSONObject jsonObject) {
+        InfluxDB influxDB = influxDBUtil.getInfluxDB();
+        // measurement 数据库中的表  point 数据库中的记录
+        final Point p = Point.measurement(Constant.INFLUXDB_NAME_DEVICE)
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField(Constant.INFLUXDB_COL_BOXID, topic)
+                .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE) - 10)
+                .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
+                .build();
+        influxDB.write(p);
+        LOGGER.info("the function saveDeviceStatusToInfluxdb save the data to inflxdb success." );
+    }
 
+    private void saveDeviceStatusToDB(String topic,JSONObject jsonObject ) {
+        // 更新到数据库中
+        Integer deviceId = Integer.valueOf(jsonObject.getIntValue(DEVICE)) - 10;
+        BoxStatusDTO boxStatusDTO = new BoxStatusDTO();
+        boxStatusDTO.setBoxnumber(topic);
+        boxStatusDTO.setDeviceid(deviceId.toString());
+        boxStatusDTO.setStatus(jsonObject.getString(VALUE));
+        boxInfoService.setBoxStatus(boxStatusDTO);
+        LOGGER.info("the function saveDeviceStatusToDB save the data to DB success." );
+    }
     private boolean isValidJSON(String str) {
         try {
             JSONObject.parseObject(str);

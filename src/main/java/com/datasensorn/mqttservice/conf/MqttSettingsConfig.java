@@ -127,7 +127,6 @@ public class MqttSettingsConfig {
         return new MessageHandler() {
             @Override
             public void handleMessage(Message<?> message) throws MessagingException {
-                //System.out.println(message.getPayload());
                 mqttMessageService.handleMsg(message);
             }
         };
