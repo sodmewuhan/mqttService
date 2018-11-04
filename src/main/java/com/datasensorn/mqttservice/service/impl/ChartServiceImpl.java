@@ -34,7 +34,6 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     InfluxDBSettings influxDBSettings;
 
-
     private static final String DEVICE_ID = "0";
 
     private static final String BOX_ID = "15919829955";

@@ -47,7 +47,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                     //如果是上报数据
                     String[] topics = topic.split(Constant.MQTT_PREFIX);
                     String msg = String.valueOf(message.getPayload());
-                    LOGGER.info("***************the receive message is " + msg);
+                    LOGGER.info("***************MqttMessageServiceImpl the receive message is " + msg);
                     if (isValidJSON(msg)) {
                         JSONObject jsonObject = JSON.parseObject(msg);
                         if (jsonObject.getIntValue(DEVICE) < 10) {

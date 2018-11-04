@@ -66,11 +66,14 @@ public class BoxInfoServiceImpl implements BoxInfoService {
     public void publishMessage(InstructionObject instructionObject) throws Exception {
         // 发送消息 json串
         try {
-            DeviceMessage deviceMessage = new DeviceMessage();
-            deviceMessage.setDeviceId(Integer.valueOf(instructionObject.getDeviceId()));
-            deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
-            mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
-            LOGGER.info(JSON.toJSONString(deviceMessage));
+            String message = StringUtils.EMPTY;
+            message = "a" + instructionObject.getDeviceId() + instructionObject.getAction() + ";";
+//            DeviceMessage deviceMessage = new DeviceMessage();
+//            deviceMessage.setDeviceId(Integer.valueOf(instructionObject.getDeviceId()));
+//            deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
+            //mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
+            mqttGateway.sendToMqtt(message,instructionObject.getTopic());
+            LOGGER.info(JSON.toJSONString(message));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(),e);
         }
