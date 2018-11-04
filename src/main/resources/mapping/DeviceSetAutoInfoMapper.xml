@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.DeviceSetAutoInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo" >
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="box_id" property="boxId" jdbcType="INTEGER" />
-    <result column="beginTime" property="begintime" jdbcType="TIMESTAMP" />
-    <result column="runTime" property="runtime" jdbcType="INTEGER" />
-    <result column="topVaule" property="topvaule" jdbcType="DOUBLE" />
-    <result column="lowValue" property="lowvalue" jdbcType="DOUBLE" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.DeviceSetAutoInfoMapper">
+  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="box_id" jdbcType="INTEGER" property="boxId" />
+    <result column="beginTime" jdbcType="TIMESTAMP" property="begintime" />
+    <result column="runTime" jdbcType="INTEGER" property="runtime" />
+    <result column="topVaule" jdbcType="DOUBLE" property="topvaule" />
+    <result column="lowValue" jdbcType="DOUBLE" property="lowvalue" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     ID, box_id, beginTime, runTime, topVaule, lowValue
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_box_setAutoInfo
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_box_setAutoInfo
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo" >
+  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo">
     insert into t_box_setAutoInfo (ID, box_id, beginTime, 
       runTime, topVaule, lowValue
       )
@@ -30,71 +30,71 @@
       #{runtime,jdbcType=INTEGER}, #{topvaule,jdbcType=DOUBLE}, #{lowvalue,jdbcType=DOUBLE}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo" >
+  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo">
     insert into t_box_setAutoInfo
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         ID,
       </if>
-      <if test="boxId != null" >
+      <if test="boxId != null">
         box_id,
       </if>
-      <if test="begintime != null" >
+      <if test="begintime != null">
         beginTime,
       </if>
-      <if test="runtime != null" >
+      <if test="runtime != null">
         runTime,
       </if>
-      <if test="topvaule != null" >
+      <if test="topvaule != null">
         topVaule,
       </if>
-      <if test="lowvalue != null" >
+      <if test="lowvalue != null">
         lowValue,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="boxId != null" >
+      <if test="boxId != null">
         #{boxId,jdbcType=INTEGER},
       </if>
-      <if test="begintime != null" >
+      <if test="begintime != null">
         #{begintime,jdbcType=TIMESTAMP},
       </if>
-      <if test="runtime != null" >
+      <if test="runtime != null">
         #{runtime,jdbcType=INTEGER},
       </if>
-      <if test="topvaule != null" >
+      <if test="topvaule != null">
         #{topvaule,jdbcType=DOUBLE},
       </if>
-      <if test="lowvalue != null" >
+      <if test="lowvalue != null">
         #{lowvalue,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo">
     update t_box_setAutoInfo
-    <set >
-      <if test="boxId != null" >
+    <set>
+      <if test="boxId != null">
         box_id = #{boxId,jdbcType=INTEGER},
       </if>
-      <if test="begintime != null" >
+      <if test="begintime != null">
         beginTime = #{begintime,jdbcType=TIMESTAMP},
       </if>
-      <if test="runtime != null" >
+      <if test="runtime != null">
         runTime = #{runtime,jdbcType=INTEGER},
       </if>
-      <if test="topvaule != null" >
+      <if test="topvaule != null">
         topVaule = #{topvaule,jdbcType=DOUBLE},
       </if>
-      <if test="lowvalue != null" >
+      <if test="lowvalue != null">
         lowValue = #{lowvalue,jdbcType=DOUBLE},
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo">
     update t_box_setAutoInfo
     set box_id = #{boxId,jdbcType=INTEGER},
       beginTime = #{begintime,jdbcType=TIMESTAMP},
@@ -103,4 +103,5 @@
       lowValue = #{lowvalue,jdbcType=DOUBLE}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

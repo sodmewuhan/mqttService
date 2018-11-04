@@ -42,7 +42,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
             throw new MessagingException("the message is empty");
         } else {
             try {
-                String topic = String.valueOf(message.getHeaders().get("mqtt_topic"));
+                String topic = String.valueOf(message.getHeaders().get("mqtt_receivedTopic"));
                 if (topic.contains(Constant.MQTT_PREFIX)) {
                     //如果是上报数据
                     String[] topics = topic.split(Constant.MQTT_PREFIX);

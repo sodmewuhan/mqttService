@@ -43,7 +43,8 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache:  false
-    mode: HTML
+    content-type: text/htm
+    mode: HTML5
 
 ## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis:
