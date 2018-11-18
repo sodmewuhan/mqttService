@@ -1,7 +1,7 @@
 package com.datasensorn.mqttservice.service.impl;
 
+import com.datasensorn.mqttservice.conf.InfluxDBSettingConfig;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
-import com.datasensorn.mqttservice.model.InfluxDBSettings;
 import com.datasensorn.mqttservice.model.biz.PoolCurrentStatus;
 import com.datasensorn.mqttservice.service.PoolService;
 import org.influxdb.InfluxDB;
@@ -23,7 +23,7 @@ public class PoolServiceImpl implements PoolService {
     private InfluxDBUtil influxDBUtil;
 
     @Autowired
-    InfluxDBSettings influxDBSettings;
+    InfluxDBSettingConfig influxDBSettingConfig;
 
     @Override
     public PoolCurrentStatus getCurrentStatus(String boxid) {
@@ -43,7 +43,7 @@ public class PoolServiceImpl implements PoolService {
                 .append(" time")
                 .append(" DESC")
                 .append(" limit 1");
-        Query query = new Query(command.toString(),influxDBSettings.getDatabase());
+        Query query = new Query(command.toString(),influxDBSettingConfig.getDatabase());
         QueryResult results = influxDB.query(query);
         if (results != null && results.getResults()!=null && !results.getResults().isEmpty()) {
             //结果组装

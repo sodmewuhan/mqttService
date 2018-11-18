@@ -1,14 +1,14 @@
 package com.datasensorn.mqttservice.conf;
 
-import com.datasensorn.mqttservice.model.InfluxDBSettings;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * influxdb 的配置信息
  */
 @Configuration
+@Getter
 public class InfluxDBSettingConfig {
 
     @Value("${spring.influxdb.url}")
@@ -23,9 +23,6 @@ public class InfluxDBSettingConfig {
     @Value("${spring.influxdb.database}")
     private String database;
 
-//    @Value("${spring.influxdb.retentionpolicy}")
-//    private String retentionpolicy;
-
     @Value("${spring.influxdb.connecttimeout}")
     private String connecttimeout;
 
@@ -35,8 +32,12 @@ public class InfluxDBSettingConfig {
     @Value("${spring.influxdb.timeout}")
     private String timeout;
 
-    @Bean
-    public InfluxDBSettings influxDBSettings() {
-        return new InfluxDBSettings( influxdbURL, username, password,database,connecttimeout,readtimeout,timeout);
-    }
+    @Value("${spring.influxdb.retentionpolicy}")
+    private String retentionpolicy;
+
+    @Value("${spring.influxdb.duration}")
+    private String duration;
+
+    @Value("${spring.influxdb.replicationNum}")
+    private String replicationNum;
 }

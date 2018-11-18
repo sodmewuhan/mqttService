@@ -14,6 +14,7 @@ application:
     username: admin
     password: password
     timeout:  10
+    completionTimeout:  3000
     heartbeat:  10
   weather:
     AppCode:  e16633309c1940cd8170272912e54a12
@@ -25,10 +26,25 @@ application:
 spring:
 #mysql 数据库
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
     url:  jdbc:mysql://101.37.146.78:3306/datasensorn?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: hello123456
-    driver-class-name: com.mysql.jdbc.Driver
+    initialSize: 5
+    minIdle: 5
+    maxActive: 30
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,log4j
+    logSlowSql: true
 #influxdb 数据库
   influxdb:
       url: http://101.37.146.78:8086
@@ -38,6 +54,9 @@ spring:
       connecttimeout: 10
       readtimeout: 30
       timeout: 10
+      retentionpolicy: saveThreeMonth
+      duration: 180d  #数据默认保存180天
+      replicationNum: 1 #数据默认保存1份
 # thymeleaf 配置
   thymeleaf:
     prefix: classpath:/templates/

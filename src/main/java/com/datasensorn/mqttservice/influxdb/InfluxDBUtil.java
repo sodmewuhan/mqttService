@@ -1,15 +1,20 @@
 package com.datasensorn.mqttservice.influxdb;
 
-import com.datasensorn.mqttservice.model.InfluxDBSettings;
+import com.datasensorn.mqttservice.conf.InfluxDBSettingConfig;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @Component
 public class InfluxDBUtil {
@@ -19,19 +24,43 @@ public class InfluxDBUtil {
     private InfluxDB influxDB = null;
 
     @Autowired
-    InfluxDBSettings influxDBSettings;
+    InfluxDBSettingConfig influxDBSettingConfig;
 
     @PostConstruct
     public void InfluxDBCreate() {
-        influxDB = InfluxDBFactory.connect(influxDBSettings.getInfluxdbURL(),
-                influxDBSettings.getUsername(),influxDBSettings.getPassword());
-        influxDB.setDatabase(influxDBSettings.getDatabase());
+        influxDB = InfluxDBFactory.connect(influxDBSettingConfig.getInfluxdbURL(),
+                influxDBSettingConfig.getUsername(),influxDBSettingConfig.getPassword());
+        influxDB.setDatabase(influxDBSettingConfig.getDatabase());
         // Flush every 2000 Points, at least every 100ms
         influxDB.enableBatch(BatchOptions.DEFAULTS.actions(2000).flushDuration(100));
+        Pong pong = influxDB.ping();
+        if (pong != null) {
+            LOGGER.info("******************the inflxdb haved connected.");
+        }
     }
 
     public InfluxDB getInfluxDB() {
         return influxDB;
     }
 
+
+    /**
+     * 查询数据
+     *
+     * @param command
+     * @return QueryResult
+     */
+    public QueryResult query(String command) {
+        return influxDB.query(new Query(command, influxDBSettingConfig.getDatabase()));
+    }
+
+    /**
+     * 插入数据
+     *
+     */
+    public void insert(String measurement, Map<String, String> tags, Map<String, Object> fields) {
+        Point.Builder builder = Point.measurement(measurement);
+        builder.tag(tags);
+        builder.fields(fields);
+    }
 }

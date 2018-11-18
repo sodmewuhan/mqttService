@@ -59,4 +59,6 @@ public class PoolManagerRestController {
         PoolCurrentStatus poolCurrentStatus = poolService.getCurrentStatus(boxId);
         return resultGenerator.genSuccessResult(null);
     }
+
+
 }

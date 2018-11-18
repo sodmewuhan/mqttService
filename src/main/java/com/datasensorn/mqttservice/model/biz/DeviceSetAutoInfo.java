@@ -5,7 +5,7 @@ import java.util.Date;
 public class DeviceSetAutoInfo {
     private Integer id;
 
-    private Integer boxId;
+    private String boxId;
 
     private Date begintime;
 
@@ -23,12 +23,12 @@ public class DeviceSetAutoInfo {
         this.id = id;
     }
 
-    public Integer getBoxId() {
+    public String getBoxId() {
         return boxId;
     }
 
-    public void setBoxId(Integer boxId) {
-        this.boxId = boxId;
+    public void setBoxId(String boxId) {
+        this.boxId = boxId == null ? null : boxId.trim();
     }
 
     public Date getBegintime() {

@@ -1,8 +1,7 @@
 package com.datasensorn.mqttservice.service.impl;
 
-import com.datasensorn.mqttservice.Utils.DateUtils;
+import com.datasensorn.mqttservice.conf.InfluxDBSettingConfig;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
-import com.datasensorn.mqttservice.model.InfluxDBSettings;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.biz.AxisDatas;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
@@ -14,11 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,12 +28,9 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     private InfluxDBUtil influxDBUtil;
 
-    @Autowired
-    InfluxDBSettings influxDBSettings;
+    InfluxDBSettingConfig influxDBSettingConfig;
 
     private static final String DEVICE_ID = "0";
-
-    private static final String BOX_ID = "15919829955";
 
     private static final Integer TEN = 10;
     @Override
@@ -54,7 +48,7 @@ public class ChartServiceImpl implements ChartService {
                 .append("ms");
 
         ChartSerial chartSerial = new ChartSerial();
-        Query query = new Query(command.toString(),influxDBSettings.getDatabase());
+        Query query = new Query(command.toString(),influxDBSettingConfig.getDatabase());
 
         LOGGER.info("the database is " + query.getDatabase());
 

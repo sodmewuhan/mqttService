@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.datasensorn.mqttservice.Utils.Constant;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
+import com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo;
+import com.datasensorn.mqttservice.model.biz.mapper.DeviceSetAutoInfoMapper;
 import com.datasensorn.mqttservice.service.BoxInfoService;
 import com.datasensorn.mqttservice.service.MqttMessageService;
-import org.influxdb.InfluxDB;
-import org.influxdb.dto.Point;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 @Service
 public class MqttMessageServiceImpl implements MqttMessageService {
@@ -29,6 +31,9 @@ public class MqttMessageServiceImpl implements MqttMessageService {
 
     @Autowired
     private InfluxDBUtil influxDBUtil;
+
+    @Autowired
+    private DeviceSetAutoInfoMapper deviceSetAutoInfoMapper;
 
     private final static String VALUE = "value";
 
@@ -58,6 +63,15 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                             saveDeviceStatusToInfluxdb(topics[1], jsonObject);
                             saveDeviceStatusToDB(topics[1],jsonObject);
                         }
+                    } else {
+                        // 其他类型的上传
+                        String prefix = msg.substring(0,1);
+                        if ("t".equals(prefix)) {
+                            // 保存定时开关
+                        } else if ("o".equals(prefix)) {
+                            // 保存上下限
+                            saveDeviceTopLow(topics[1],msg);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -67,28 +81,29 @@ public class MqttMessageServiceImpl implements MqttMessageService {
     }
 
     private void savePoolStatusToInfluxdb(String topic, JSONObject jsonObject) {
-        InfluxDB influxDB = influxDBUtil.getInfluxDB();
-        // measurement 数据库中的表  point 数据库中的记录
-        final Point p = Point.measurement(Constant.INFLUXDB_NAME_FISH)
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField(Constant.INFLUXDB_COL_BOXID, topic)
-                .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE))
-                .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
-                .build();
-        influxDB.write(p);
+        Map<String, Object> fields = Maps.newHashMap();
+        Map<String, String> tags = Maps.newHashMap();
+
+        tags.put("TAG_CODE", topic);
+        fields.put(Constant.INFLUXDB_COL_BOXID,topic);
+        fields.put(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getString(DEVICE));
+        fields.put(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE));
+        influxDBUtil.insert(Constant.INFLUXDB_NAME_FISH, tags, fields);
+
         LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
     }
     private void saveDeviceStatusToInfluxdb(String topic,JSONObject jsonObject) {
-        InfluxDB influxDB = influxDBUtil.getInfluxDB();
-        // measurement 数据库中的表  point 数据库中的记录
-        final Point p = Point.measurement(Constant.INFLUXDB_NAME_DEVICE)
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField(Constant.INFLUXDB_COL_BOXID, topic)
-                .addField(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE) - 10)
-                .addField(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE))
-                .build();
-        influxDB.write(p);
-        LOGGER.info("the function saveDeviceStatusToInfluxdb save the data to inflxdb success." );
+
+        Map<String, Object> fields = Maps.newHashMap();
+        Map<String, String> tags = Maps.newHashMap();
+
+        tags.put("TAG_CODE", topic);
+        fields.put(Constant.INFLUXDB_COL_BOXID,topic);
+        fields.put(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE) - 10);
+        fields.put(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE));
+        influxDBUtil.insert(Constant.INFLUXDB_NAME_DEVICE, tags, fields);
+
+        LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
     }
 
     private void saveDeviceStatusToDB(String topic,JSONObject jsonObject ) {
@@ -112,5 +127,31 @@ public class MqttMessageServiceImpl implements MqttMessageService {
             }
         }
         return true;
+    }
+
+    /** 保存设备的最高和最低值 */
+    private void saveDeviceTopLow(String topic,String msg) {
+        String topstr = msg.substring(1,4);
+        String lowstr = msg.substring(4,7);
+
+        Double top = Double.parseDouble(topstr);
+        Double low = Double.parseDouble(lowstr);
+        if (StringUtils.isNotEmpty(topic)) {
+            DeviceSetAutoInfo deviceSetAutoInfo = deviceSetAutoInfoMapper.selectByBoxId(topic);
+            if (deviceSetAutoInfo != null) {
+                DeviceSetAutoInfo updateObject = new DeviceSetAutoInfo();
+                updateObject.setId(deviceSetAutoInfo.getId());
+                updateObject.setTopvaule(top);
+                updateObject.setLowvalue(low);
+                deviceSetAutoInfoMapper.updateByPrimaryKeySelective(updateObject);
+            } else {
+                DeviceSetAutoInfo insertObject = new DeviceSetAutoInfo();
+                insertObject.setBoxId(topic);
+                insertObject.setLowvalue(low);
+                insertObject.setTopvaule(top);
+                deviceSetAutoInfoMapper.insert(insertObject);
+            }
+        }
+
     }
 }

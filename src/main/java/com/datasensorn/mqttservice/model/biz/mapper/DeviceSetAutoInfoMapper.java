@@ -1,7 +1,9 @@
 package com.datasensorn.mqttservice.model.biz.mapper;
 
 import com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface DeviceSetAutoInfoMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface DeviceSetAutoInfoMapper {
     int updateByPrimaryKeySelective(DeviceSetAutoInfo record);
 
     int updateByPrimaryKey(DeviceSetAutoInfo record);
+
+    DeviceSetAutoInfo selectByBoxId(String boxId);
 }

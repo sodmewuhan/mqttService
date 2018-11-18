@@ -61,6 +61,9 @@ public class MqttSettingsConfig {
     @Value("${application.mqtt.client.outBoundId}")
     private String outBoundId;
 
+    @Value("${application.mqtt.completionTimeout}")
+    private int completionTimeout ;   //连接超时
+
     @Bean
     public IntegrationFlow mqttOutFlow() {
         return IntegrationFlows.from(CharacterStreamReadingMessageSource.stdin(),
@@ -76,7 +79,7 @@ public class MqttSettingsConfig {
         mqttConnectOptions.setUserName(username);
         mqttConnectOptions.setPassword(password.toCharArray());
         mqttConnectOptions.setServerURIs(new String[]{mqttHostUrl});
-        mqttConnectOptions.setKeepAliveInterval(60*60*24);
+        mqttConnectOptions.setKeepAliveInterval(2);
         return mqttConnectOptions;
     }
     @Bean
@@ -95,6 +98,11 @@ public class MqttSettingsConfig {
         return messageHandler;
 
     }
+
+    /**
+     * 接受通道
+     * @return
+     */
     @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
@@ -107,6 +115,7 @@ public class MqttSettingsConfig {
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();
     }
+
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
@@ -115,6 +124,7 @@ public class MqttSettingsConfig {
                         inBoundId,
                         mqttClientFactory(),
                         mqttTopic);
+        adapter.setCompletionTimeout(completionTimeout);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
         adapter.setOutputChannel(mqttInputChannel());
