@@ -1,7 +1,6 @@
 package com.datasensorn.mqttservice.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.datasensorn.mqttservice.controller.model.DeviceMessage;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.exception.ServiceException;
@@ -19,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

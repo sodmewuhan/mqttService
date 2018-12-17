@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.UserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.UserInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="phoneNum" property="phonenum" jdbcType="VARCHAR" />
+    <result column="userType" property="usertype" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyname" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, phone, password, userName, phoneNum, userType, companyName, province, city
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
+    insert into t_user (id, phone, password, 
+      userName, phoneNum, userType, 
+      companyName, province, city
+      )
+    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, #{usertype,jdbcType=VARCHAR}, 
+      #{companyname,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="phonenum != null" >
+        phoneNum,
+      </if>
+      <if test="usertype != null" >
+        userType,
+      </if>
+      <if test="companyname != null" >
+        companyName,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null" >
+        #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null" >
+        #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null" >
+        #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
+    update t_user
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null" >
+        phoneNum = #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null" >
+        userType = #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null" >
+        companyName = #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
+    update t_user
+    set phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR},
+      userType = #{usertype,jdbcType=VARCHAR},
+      companyName = #{companyname,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="checkUserLogin" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" resultType="java.lang.Integer">
+     select count(1)
+        from t_user
+        where phone = #{phone,jdbcType=VARCHAR}
+          and password=#{password,jdbcType=VARCHAR}
+  </select>
+</mapper>

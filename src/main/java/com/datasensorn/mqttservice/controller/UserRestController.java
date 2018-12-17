@@ -3,7 +3,6 @@ package com.datasensorn.mqttservice.controller;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.controller.model.LoginParmObject;
 import com.datasensorn.mqttservice.model.Result;
-import com.datasensorn.mqttservice.model.biz.User;
 import com.datasensorn.mqttservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
