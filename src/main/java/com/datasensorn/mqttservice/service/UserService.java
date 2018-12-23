@@ -15,8 +15,8 @@ public interface UserService {
     public boolean logon(String accountName ,String password);
 
     /**
-     * 根据用户注册的电话，得到用户信息
+     * 根据用户名称，得到用户信息
      * @return
      */
-    public UserInfo findUserByPhone(String phone);
+    public UserInfo findUserByUserName(String userName);
 }

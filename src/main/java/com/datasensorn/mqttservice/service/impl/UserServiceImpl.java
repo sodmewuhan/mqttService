@@ -18,21 +18,22 @@ public class UserServiceImpl implements UserService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public boolean logon(String phone, String password) {
-        Assert.notNull(phone, "parameter phone is empty");
+    public boolean logon(String userName, String password) {
+        Assert.notNull(userName, "parameter userName is empty");
         Assert.notNull(password, "password phone is empty");
 
-        LOGGER.info("begin check user login the parameter is the phone :" + phone +
+        LOGGER.info("begin check user login the parameter is the userName :" + userName +
                 " and password :" + password);
         UserInfo user = new UserInfo();
-        user.setPhone(phone);
+        user.setUsername(userName);
         user.setPassword(password);
         int ret = userInfoMapper.checkUserLogin(user);
         return ret > 0 ?  true : false;
     }
 
     @Override
-    public UserInfo findUserByPhone(String phone) {
-        return null;
+    public UserInfo findUserByUserName(String userName) {
+        Assert.notNull(userName, "parameter userName is empty");
+        return userInfoMapper.findUserByUserName(userName);
     }
 }

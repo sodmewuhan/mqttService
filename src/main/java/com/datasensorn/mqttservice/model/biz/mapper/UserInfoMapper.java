@@ -23,4 +23,11 @@ public interface UserInfoMapper {
      * @return
      */
     int checkUserLogin(UserInfo user);
+
+    /**
+     * 根据用户电话，得到用户信息
+     * @param phone
+     * @return
+     */
+    UserInfo findUserByUserName(String phone);
 }

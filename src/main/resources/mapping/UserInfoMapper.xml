@@ -142,7 +142,14 @@
   <select id="checkUserLogin" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" resultType="java.lang.Integer">
      select count(1)
         from t_user
-        where phone = #{phone,jdbcType=VARCHAR}
+        where userName = #{username,jdbcType=VARCHAR}
           and password=#{password,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_user
+    where userName = #{userName,jdbcType=VARCHAR}
   </select>
 </mapper>

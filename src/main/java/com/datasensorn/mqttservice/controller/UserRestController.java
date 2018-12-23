@@ -2,11 +2,14 @@ package com.datasensorn.mqttservice.controller;
 
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.controller.model.LoginParmObject;
+import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.Result;
+import com.datasensorn.mqttservice.model.biz.UserInfo;
 import com.datasensorn.mqttservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,9 +31,35 @@ public class UserRestController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody LoginParmObject parmObject) {
 
-        boolean retn = userService.logon(parmObject.getPhone(),parmObject.getPwd());
+        boolean retn = userService.logon(parmObject.getUsername(),parmObject.getPassword());
         ResultGenerator resultGenerator = new ResultGenerator();
         return resultGenerator.genSuccessResult(retn);
+
+    }
+
+    /**
+     * 根据用户登录的电话号码，得到用户信息
+     * @param userInfoDTO
+     * @return
+     */
+    @RequestMapping(value = "/findUser", method = RequestMethod.POST)
+    public Result findUserByPhone(@RequestBody UserInfoDTO userInfoDTO) {
+        Assert.notNull(userInfoDTO,"用户查询参数为空");
+        Assert.hasText(userInfoDTO.getUsername(),"用户查询参数为空");
+        try {
+            UserInfo user = userService.findUserByUserName(userInfoDTO.getUsername());
+            if (user != null) {
+                ResultGenerator resultGenerator = new ResultGenerator();
+                return resultGenerator.genSuccessResult(user);
+            } else {
+                ResultGenerator resultGenerator = new ResultGenerator();
+                return resultGenerator.genFailResult("没有找到该用户");
+            }
+        }catch (Exception e) {
+            LOGGER.error("call the function findUserByPhone error ",e);
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genFailResult("服务错误，错误信息为" + e.getMessage());
+        }
 
     }
 }
