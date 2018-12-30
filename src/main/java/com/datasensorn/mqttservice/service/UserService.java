@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.service;
 
+import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.biz.UserInfo;
 
 /**
@@ -19,4 +20,11 @@ public interface UserService {
      * @return
      */
     public UserInfo findUserByUserName(String userName);
+
+    /**
+     *  更新用户信息
+     * @param userInfoDTO 用户信息
+     * @return
+     */
+    public boolean updateUserInfo(UserInfoDTO userInfoDTO) throws Exception;
 }

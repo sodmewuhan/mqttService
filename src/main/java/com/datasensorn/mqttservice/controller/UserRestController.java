@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.controller.model.LoginParmObject;
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
@@ -43,7 +44,7 @@ public class UserRestController {
      * @return
      */
     @RequestMapping(value = "/findUser", method = RequestMethod.POST)
-    public Result findUserByPhone(@RequestBody UserInfoDTO userInfoDTO) {
+    public Result findUser(@RequestBody UserInfoDTO userInfoDTO) {
         Assert.notNull(userInfoDTO,"用户查询参数为空");
         Assert.hasText(userInfoDTO.getUsername(),"用户查询参数为空");
         try {
@@ -61,5 +62,22 @@ public class UserRestController {
             return resultGenerator.genFailResult("服务错误，错误信息为" + e.getMessage());
         }
 
+    }
+
+    @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
+    public Result updateUserInfo(@RequestBody UserInfoDTO userInfoDTO) {
+        LOGGER.info("update the user info the parameter is " + JSON.toJSONString(userInfoDTO,true));
+        ResultGenerator resultGenerator = new ResultGenerator();
+        try {
+            boolean retn = userService.updateUserInfo(userInfoDTO);
+            if (retn) {
+                return resultGenerator.genSuccessResult();
+            } else {
+                return resultGenerator.genFailResult("数据更新失败");
+            }
+        } catch (Exception e) {
+            LOGGER.error("用户数据更新失败",e);
+            return resultGenerator.genFailResult(e.getMessage());
+        }
     }
 }

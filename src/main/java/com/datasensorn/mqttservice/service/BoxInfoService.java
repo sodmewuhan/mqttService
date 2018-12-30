@@ -1,6 +1,8 @@
 package com.datasensorn.mqttservice.service;
 
+import com.datasensorn.mqttservice.controller.model.BoxInfoDDTO;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
+import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.dto.WaterInfo;
 import com.datasensorn.mqttservice.exception.ServiceException;
@@ -16,11 +18,18 @@ public interface BoxInfoService {
 
     /**
      * 添加盒子信息
-     * @param userId 用户编号
      * @param boxInfo 盒子信息
      * @return
      */
-    public int addBoxInfo(BoxInfo boxInfo) throws ServiceException ;
+    int addBoxInfo(BoxInfoDDTO boxInfo) throws ServiceException ;
+
+    /**
+     * 根据用户，得到该用户下的所有设备信息
+     * @param userInfoDTO
+     * @return
+     * @throws Exception
+     */
+    List<BoxInfo> getBoxInfoByUser(UserInfoDTO userInfoDTO) throws Exception;
 
     /**
      * 删除盒子信息
