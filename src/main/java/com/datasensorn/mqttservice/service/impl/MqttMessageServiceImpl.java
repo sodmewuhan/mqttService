@@ -113,7 +113,12 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         boxStatusDTO.setBoxnumber(topic);
         boxStatusDTO.setDeviceid(deviceId.toString());
         boxStatusDTO.setStatus(jsonObject.getString(VALUE));
-        boxInfoService.setBoxStatus(boxStatusDTO);
+        try {
+            boxInfoService.setBoxStatus(boxStatusDTO);
+        } catch (Exception e) {
+            LOGGER.error("the save boxInfo occure error,the error is " + e.getMessage(),e);
+        }
+
         LOGGER.info("the function saveDeviceStatusToDB save the data to DB success." );
     }
     private boolean isValidJSON(String str) {

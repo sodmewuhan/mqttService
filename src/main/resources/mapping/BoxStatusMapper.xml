@@ -93,4 +93,14 @@
     where boxNumber = #{boxnumber,jdbcType=VARCHAR}
       and deviceId = #{deviceid,jdbcType=VARCHAR}
   </update>
+
+  <select id="getBoxStatusByBox" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_box_status
+    where boxnumber in
+    <foreach collection="boxNumber" index="index" item="item" open="(" separator="," close=")">
+                     #{item,jdbcType=VARCHAR}
+    </foreach>
+  </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.datasensorn.mqttservice.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
-import com.datasensorn.mqttservice.controller.model.BoxInfoDDTO;
+import com.datasensorn.mqttservice.controller.model.BoxAndWaterStatusDTO;
+import com.datasensorn.mqttservice.controller.model.BoxInfoDTO;
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.dto.BoxStatusDTO;
 import com.datasensorn.mqttservice.exception.ServiceException;
@@ -35,7 +37,7 @@ public class BoxMangeRestControll {
      * @return
      */
     @RequestMapping(value = "/addBoxInfo", method = RequestMethod.POST)
-    public Result addBoxInfo(@RequestBody BoxInfoDDTO boxInfo) {
+    public Result addBoxInfo(@RequestBody BoxInfoDTO boxInfo) {
         LOGGER.info("======add box information========");
         try {
             boxInfoService.addBoxInfo(boxInfo);
@@ -64,7 +66,24 @@ public class BoxMangeRestControll {
             ResultGenerator resultGenerator = new ResultGenerator();
             return resultGenerator.genFailResult(e.getMessage());
         }
+    }
 
+    /**
+     *  得到当前用户的所有盒子状态
+     * @param userInfoDTO 用户编号
+     * @return
+     */
+    @RequestMapping(value = "/getBoxStatusByUser", method = RequestMethod.POST)
+    public Result getBoxStatusByUser(@RequestBody UserInfoDTO userInfoDTO) {
+        LOGGER.info("call the function getBoxStatusByUser,the parameter is " + JSON.toJSONString(userInfoDTO,true));
+        try {
+            List<BoxAndWaterStatusDTO> boxAndWaterStatusDTOS = boxInfoService.getBoxStatusByUser(userInfoDTO);
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genSuccessResult(boxAndWaterStatusDTOS);
+        } catch (Exception e) {
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genFailResult(e.getMessage());
+        }
     }
     /**
      * 删除盒子信息
@@ -93,9 +112,13 @@ public class BoxMangeRestControll {
     @RequestMapping(value = "/getBoxStatus/{boxId}", method = RequestMethod.GET)
     public Result getBoxStatus(@PathVariable("boxId") String boxId) {
         LOGGER.info("begin called the function getBoxStatus");
-        List<BoxStatusDTO> boxStatusDTO = boxInfoService.getBoxStatus(boxId);
-        ResultGenerator resultGenerator = new ResultGenerator();
-        return resultGenerator.genSuccessResult(boxStatusDTO);
+        try {
+            List<BoxStatusDTO> boxStatusDTO = boxInfoService.getBoxStatus(boxId);
+            ResultGenerator resultGenerator = new ResultGenerator();
+            return resultGenerator.genSuccessResult(boxStatusDTO);
+        } catch (Exception e) {
+            return  null;
+        }
     }
 
     /**
@@ -108,7 +131,11 @@ public class BoxMangeRestControll {
     @ResponseBody
     public Result setBoxStatus(@RequestBody BoxStatusDTO boxStatusDTO) {
         ResultGenerator resultGenerator = new ResultGenerator();
-        boxInfoService.setBoxStatus(boxStatusDTO);
-        return resultGenerator.genSuccessResult();
+        try {
+            boxInfoService.setBoxStatus(boxStatusDTO);
+            return resultGenerator.genSuccessResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
