@@ -28,6 +28,7 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     private InfluxDBUtil influxDBUtil;
 
+    @Autowired
     InfluxDBSettingConfig influxDBSettingConfig;
 
     private static final String DEVICE_ID = "0";

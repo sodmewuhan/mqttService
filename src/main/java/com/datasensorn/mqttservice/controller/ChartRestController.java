@@ -27,7 +27,7 @@ public class ChartRestController {
      * @return
      */
     @RequestMapping(value = "/day", method = RequestMethod.POST)
-    @ResponseBody
+    //@ResponseBody
     public Result getday(@RequestBody ChartRequest chartRequest) {
         LOGGER.info("called the method is getday");
         ResultGenerator resultGenerator = new ResultGenerator();
