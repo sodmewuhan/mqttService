@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.datasensorn.mqttservice.Utils.Constant;
 import com.datasensorn.mqttservice.controller.model.BoxAndWaterStatusDTO;
 import com.datasensorn.mqttservice.controller.model.BoxInfoDTO;
 import com.datasensorn.mqttservice.controller.model.InstructionObject;
@@ -20,10 +21,8 @@ import com.datasensorn.mqttservice.service.BoxInfoService;
 import com.datasensorn.mqttservice.service.PoolService;
 import com.datasensorn.mqttservice.service.UserService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,26 +163,27 @@ public class BoxInfoServiceImpl implements BoxInfoService {
         if (boxInfoId == null) {
             throw new ServiceException("删除盒子信息ID为空");
         }
-
-//        return boxInfoMapper.delBoxInfo(boxInfoId);
         return 0;
     }
 
     @Override
-    public void publishMessage(InstructionObject instructionObject) throws Exception {
+    public void publishMessageAndSetDevStatus(InstructionObject instructionObject) throws Exception {
+        Assert.notNull(instructionObject,"传递参数对象不能为空");
+        Assert.notNull(instructionObject.getDeviceId(),"传递设备编号不能为空");
+        Assert.notNull(instructionObject.getAction(),"设置状态不能为空");
         // 发送消息 json串
-        try {
-            String message = StringUtils.EMPTY;
-            message = "a" + instructionObject.getDeviceId() + instructionObject.getAction() + ";";
-//            DeviceMessage deviceMessage = new DeviceMessage();
-//            deviceMessage.setDeviceId(Integer.valueOf(instructionObject.getDeviceId()));
-//            deviceMessage.setAction(Integer.valueOf(instructionObject.getAction()));
-            //mqttGateway.sendToMqtt(JSON.toJSONString(deviceMessage),instructionObject.getTopic());
-            mqttGateway.sendToMqtt(message,instructionObject.getTopic());
-            LOGGER.info(JSON.toJSONString(message));
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e);
-        }
+        String message = Constant.MQTT_DOWN_SET_STATUS_PREFIX + instructionObject.getDeviceId() + instructionObject.getAction() + ";";
+        String topic = Constant.MQTT_DOWN_PREFIX + instructionObject.getTopic();
+        mqttGateway.sendToMqtt(message,topic);
+        LOGGER.info("the dev id is " + instructionObject.getDeviceId() + " publish the message is " + JSON.toJSONString(message));
+        // 更新数据库状态
+        BoxStatusDTO dto = new BoxStatusDTO();
+        dto.setBoxnumber(instructionObject.getTopic());
+        dto.setDeviceid(instructionObject.getDeviceId());
+        dto.setStatus(instructionObject.getAction());
+        setBoxStatus(dto);
+        LOGGER.info("the boxNumber id is " + instructionObject.getTopic() + " and deviceid is "
+                + instructionObject.getDeviceId() + " set database action is " + instructionObject.getAction() + " success .");
     }
 
     @Override
@@ -201,7 +201,7 @@ public class BoxInfoServiceImpl implements BoxInfoService {
     @Override
     public void setBoxStatus(BoxStatusDTO boxStatusDTO) throws Exception{
         BoxStatus boxStatus = new BoxStatus();
-        BeanUtils.copyProperties(boxStatusDTO,boxStatus);
+        BeanUtils.copyProperties(boxStatus,boxStatusDTO);
         boxStatusMapper.updateByBoxNumber(boxStatus);
     }
 }

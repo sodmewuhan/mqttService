@@ -39,10 +39,10 @@ public interface BoxInfoService {
     int delBoxInfo(Integer boxInfoId) throws ServiceException;
 
     /**
-     * 向设备发送消息
+     * 向设备发送消息，并且更新数据库状态
      * @throws Exception
      */
-    void publishMessage(InstructionObject instructionObject) throws Exception;
+    void publishMessageAndSetDevStatus(InstructionObject instructionObject) throws Exception;
 
     /**
      * 更新盒子状态

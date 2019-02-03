@@ -10,6 +10,13 @@ public class Constant {
      */
     public static final String MQTT_PREFIX = "UP/";
 
+    public static final String MQTT_DOWN_PREFIX = "DOWN/";
+
+    /**
+     *
+     */
+    public static final String MQTT_DOWN_SET_STATUS_PREFIX = "a";
+
     /**
      * influxdb的measurement名字  池塘的水质情况
      */

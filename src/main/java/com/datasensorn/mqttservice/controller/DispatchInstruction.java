@@ -28,9 +28,8 @@ public class DispatchInstruction {
     public Result instruction(@RequestBody InstructionObject instructionObject) {
 
         ResultGenerator resultGenerator = new ResultGenerator();
-
         try {
-            boxInfoService.publishMessage(instructionObject);
+            boxInfoService.publishMessageAndSetDevStatus(instructionObject);
             return resultGenerator.genSuccessResult();
         } catch (Exception e) {
             return resultGenerator.genFailResult(e.getMessage());

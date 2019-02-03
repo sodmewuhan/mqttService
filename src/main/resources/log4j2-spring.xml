@@ -9,6 +9,8 @@
     <appenders>
         <!--这个输出控制台的配置-->
         <console name="Console" target="SYSTEM_OUT">
+            <!-- 只输出info之上级别的消息 -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
             <!--输出日志的格式-->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
         </console>
@@ -63,8 +65,13 @@
         <!--过滤掉spring和hibernate的一些无用的debug信息-->
         <logger name="org.springframework" level="INFO">
         </logger>
-        <logger name="org.mybatis" level="INFO">
+
+        <!-- 将业务dao接口填写进去,并用控制台输出即可 -->
+        <logger name="com.datasensorn.mqttservice.model.biz.mapper" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
         </logger>
+
         <root level="all">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>
