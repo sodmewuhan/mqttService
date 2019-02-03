@@ -22,22 +22,6 @@ public class PoolManagerRestController {
     PoolService poolService;
 
     /**
-     * 添加池塘
-     * @return
-     */
-    public Result addPool() {
-        return null;
-    }
-
-    /**
-     * 删除池塘
-     * @return
-     */
-    public Result delPool() {
-        return null;
-    }
-
-    /**
      * 池塘的当前状态
      * @return
      */
