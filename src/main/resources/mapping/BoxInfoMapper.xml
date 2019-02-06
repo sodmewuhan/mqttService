@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.BoxInfoMapper">
+  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.BoxInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="boxNumber" jdbcType="VARCHAR" property="boxnumber" />
+    <result column="registerPhone" jdbcType="VARCHAR" property="registerphone" />
+    <result column="boxSimNumber" jdbcType="VARCHAR" property="boxsimnumber" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="boxName" jdbcType="VARCHAR" property="boxname" />
+    <result column="boxType" jdbcType="VARCHAR" property="boxtype" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, boxNumber, registerPhone, boxSimNumber, userId, boxName, boxType
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_boxinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_boxinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.BoxInfo">
+    insert into t_boxinfo (id, boxNumber, registerPhone,
+    boxSimNumber, userId, boxName,
+    boxType)
+    values (#{id,jdbcType=INTEGER}, #{boxnumber,jdbcType=VARCHAR}, #{registerphone,jdbcType=VARCHAR},
+    #{boxsimnumber,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, #{boxname,jdbcType=VARCHAR},
+    #{boxtype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.BoxInfo">
+    insert into t_boxinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="boxnumber != null">
+        boxNumber,
+      </if>
+      <if test="registerphone != null">
+        registerPhone,
+      </if>
+      <if test="boxsimnumber != null">
+        boxSimNumber,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="boxname != null">
+        boxName,
+      </if>
+      <if test="boxtype != null">
+        boxType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="boxnumber != null">
+        #{boxnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registerphone != null">
+        #{registerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="boxsimnumber != null">
+        #{boxsimnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="boxname != null">
+        #{boxname,jdbcType=VARCHAR},
+      </if>
+      <if test="boxtype != null">
+        #{boxtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.BoxInfo">
+    update t_boxinfo
+    <set>
+      <if test="boxnumber != null">
+        boxNumber = #{boxnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registerphone != null">
+        registerPhone = #{registerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="boxsimnumber != null">
+        boxSimNumber = #{boxsimnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="boxname != null">
+        boxName = #{boxname,jdbcType=VARCHAR},
+      </if>
+      <if test="boxtype != null">
+        boxType = #{boxtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.BoxInfo">
+    update t_boxinfo
+    set boxNumber = #{boxnumber,jdbcType=VARCHAR},
+    registerPhone = #{registerphone,jdbcType=VARCHAR},
+    boxSimNumber = #{boxsimnumber,jdbcType=VARCHAR},
+    userId = #{userid,jdbcType=INTEGER},
+    boxName = #{boxname,jdbcType=VARCHAR},
+    boxType = #{boxtype,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findBoxInfoByBoxNumber"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_boxinfo
+    where boxNumber = #{entity.boxnumber,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findBoxInfosByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_boxinfo
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+</mapper>

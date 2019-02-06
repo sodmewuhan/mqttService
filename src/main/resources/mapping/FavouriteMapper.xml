@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.datasensorn.mqttservice.model.biz.mapper.FavouriteMapper" >
+  <resultMap id="BaseResultMap" type="com.datasensorn.mqttservice.model.biz.Favourite" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="question_id" property="questionId" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="isFavourite" property="isfavourite" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, question_id, createTime, isFavourite
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_favourite
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_favourite
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.Favourite" >
+    insert into t_favourite (id, username, question_id, 
+      createTime, isFavourite)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{questionId,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{isfavourite,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.Favourite" >
+    insert into t_favourite
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="questionId != null" >
+        question_id,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="isfavourite != null" >
+        isFavourite,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="questionId != null" >
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isfavourite != null" >
+        #{isfavourite,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.Favourite" >
+    update t_favourite
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="questionId != null" >
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isfavourite != null" >
+        isFavourite = #{isfavourite,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.Favourite" >
+    update t_favourite
+    set username = #{username,jdbcType=VARCHAR},
+      question_id = #{questionId,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      isFavourite = #{isfavourite,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- 当前用户是否已经关注 -->
+  <select id="isFavouriteByUsername" resultMap="BaseResultMap"  parameterType="com.datasensorn.mqttservice.model.biz.Favourite">
+    select
+    <include refid="Base_Column_List" />
+    from t_favourite
+    where question_id = #{questionId,jdbcType=INTEGER}
+    and username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 关注当前问题的总用户人数-->
+  <select id="getFavouriteCount" resultType="java.lang.Integer" parameterType="com.datasensorn.mqttservice.model.biz.Favourite">
+    select count(1)
+    from t_favourite
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </select>
+
+</mapper>
