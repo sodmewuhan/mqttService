@@ -29,4 +29,11 @@ public interface AnswerMapper {
      * @return
      */
     List<Answer> selectAnswerByQuestionId(@Param("questionId") Integer questionId);
+
+    /**
+     * 得到该问题的所有的回答总数
+     * @param questionId
+     * @return
+     */
+    Integer getAnswerCount(@Param("questionId") Integer questionId);
 }

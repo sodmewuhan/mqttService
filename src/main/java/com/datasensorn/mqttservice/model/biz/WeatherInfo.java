@@ -1,17 +1,11 @@
 package com.datasensorn.mqttservice.model.biz;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 /**
  * 天气预报信息
  */
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 public class WeatherInfo {
 
     private String showapi_res_error;
@@ -20,6 +14,6 @@ public class WeatherInfo {
 
     private String showapi_res_code;
 
-    private HourWeatherInfos showapi_res_body;
+    private WeatherResBody showapi_res_body;
 
 }

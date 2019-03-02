@@ -1,6 +1,5 @@
 package com.datasensorn.mqttservice.service;
 
-import com.datasensorn.mqttservice.model.biz.FishpondInfo;
 import com.datasensorn.mqttservice.model.biz.PoolCurrentStatus;
 
 /**

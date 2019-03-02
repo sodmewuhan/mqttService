@@ -1,5 +1,5 @@
 server:
-  port: 8011
+  port: 8016
 
 application:
   base-packages:  com.datasensorn.mqttservice
@@ -20,7 +20,7 @@ application:
   weather:
     AppCode:  e16633309c1940cd8170272912e54a12
     host: http://ali-weather.showapi.com
-    path: /hour24
+    path: /area-to-weather
 # APK 下载升级管理相关配置
   storeFilePath:  appFile/store
 

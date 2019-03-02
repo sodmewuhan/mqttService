@@ -2,6 +2,7 @@ package com.datasensorn.mqttservice.model.biz.mapper;
 
 import com.datasensorn.mqttservice.model.biz.WeatherArea;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -33,4 +34,11 @@ public interface WeatherAreaMapper {
      * @return
      */
     List<WeatherArea> getCityByProv(String prov);
+
+    /**
+     * 根据地区名称，得到地区信息
+     * @param nameen
+     * @return
+     */
+    WeatherArea getAreaIdByName(@Param("nameen") String nameen);
 }

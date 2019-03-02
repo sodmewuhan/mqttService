@@ -31,14 +31,6 @@ public class WeatherController {
     @Autowired
     AreaServiceImpl areaService;
 
-    @RequestMapping(value = "/weatherInfo" ,method=RequestMethod.GET)
-    public WeatherInfo getWeatherInfo() {
-
-        WeatherInfo retn = new WeatherInfo();
-        thirdPartService.getWeatherInfo();
-        return retn;
-    }
-
     /**
      * 获取省份信息
      * @return
@@ -55,6 +47,11 @@ public class WeatherController {
         return resultGenerator.genFailResult("获取省份信息失败");
     }
 
+    /**
+     * 得到城市信息
+     * @param prov
+     * @return
+     */
     @RequestMapping(value = "getCity", method = RequestMethod.POST)
     public Result getCity(@RequestBody String prov) {
         LOGGER.info("the parameter is " + prov);
@@ -66,5 +63,21 @@ public class WeatherController {
             LOGGER.error("the interface is error ",e);
         }
         return resultGenerator.genFailResult("获取市县信息失败");
+    }
+    /**
+     *
+     * @param areaId
+     * @return
+     */
+    @RequestMapping(value = "getWeather", method=RequestMethod.POST)
+    public Result getWeather(@RequestBody String areaId) {
+        ResultGenerator resultGenerator = new ResultGenerator();
+        try {
+            WeatherInfo weatherInfo = thirdPartService.getWeatherInfo(areaId);
+            return resultGenerator.genSuccessResult(weatherInfo);
+        } catch (Exception e) {
+            LOGGER.error("",e);
+        }
+        return resultGenerator.genFailResult("天气预报失败");
     }
 }

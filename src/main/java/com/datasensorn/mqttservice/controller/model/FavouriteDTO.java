@@ -19,5 +19,4 @@ public class FavouriteDTO {
 
     // 传递参数，当前的用户
     private String username;
-
 }

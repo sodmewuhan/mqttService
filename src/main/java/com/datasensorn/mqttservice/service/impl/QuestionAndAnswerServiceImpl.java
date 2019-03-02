@@ -90,6 +90,12 @@ public class QuestionAndAnswerServiceImpl implements QuestionAndAnswerService {
             ret.setQuestionId(question.getId());
             ret.setQcreatetime(question.getCreatetime());
             ret.setQusername(question.getUsername());
+            // 是否是我的问题
+            if (question.getUsername().equals(questionDTO.getCurUsername())) {
+                ret.setMyQuestion(true);
+            } else {
+                ret.setMyQuestion(false);
+            }
             // 得到回答列表
             List<Answer> list = answerMapper.selectAnswerByQuestionId(questionDTO.getId());
             if (CollectionUtils.isNotEmpty(list)) {
@@ -113,6 +119,12 @@ public class QuestionAndAnswerServiceImpl implements QuestionAndAnswerService {
             FavouriteDTO retFavouriteDTO = getFaourite(favouriteDTO);
             ret.setFavouriteDTO(retFavouriteDTO);
 
+            // 得到回答的总数
+            int answerCount = 0;
+            if (CollectionUtils.isNotEmpty(list)) {
+                answerCount = list.size();
+            }
+            ret.setAnswerCount(answerCount);
         }
         return ret;
     }

@@ -19,6 +19,8 @@ public class UserInfo {
 
     private String city;
 
+    private String cityId;
+
     public Integer getId() {
         return id;
     }
@@ -89,5 +91,13 @@ public class UserInfo {
 
     public void setCity(String city) {
         this.city = city == null ? null : city.trim();
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 }

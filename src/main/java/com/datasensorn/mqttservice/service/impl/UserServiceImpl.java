@@ -2,9 +2,12 @@ package com.datasensorn.mqttservice.service.impl;
 
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.biz.UserInfo;
+import com.datasensorn.mqttservice.model.biz.WeatherArea;
 import com.datasensorn.mqttservice.model.biz.mapper.UserInfoMapper;
+import com.datasensorn.mqttservice.model.biz.mapper.WeatherAreaMapper;
 import com.datasensorn.mqttservice.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    WeatherAreaMapper weatherAreaMapper; // 地区mapper
 
     @Override
     public boolean logon(String userName, String password) {
@@ -36,7 +42,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo findUserByUserName(String userName) {
         Assert.notNull(userName, "parameter userName is empty");
-        return userInfoMapper.findUserByUserName(userName);
+        UserInfo  userInfo = userInfoMapper.findUserByUserName(userName);
+        if (userInfo != null && !StringUtils.isEmpty(userInfo.getCity())) {
+            WeatherArea weatherArea = weatherAreaMapper.getAreaIdByName(userInfo.getCity());
+            if (weatherArea!=null) {
+                userInfo.setCityId(weatherArea.getAreaid());
+                return userInfo;
+            }
+            return userInfo;
+        } else {
+            return userInfo;
+        }
     }
 
     @Override

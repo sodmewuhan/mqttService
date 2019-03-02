@@ -26,4 +26,10 @@ public class QuestionDetailDTO {
 
     // 得到关注信息
     private FavouriteDTO favouriteDTO;
+
+    // 问题回答的数量
+    private  Integer answerCount;
+
+    // 是否是我的问题
+    private boolean isMyQuestion;
 }

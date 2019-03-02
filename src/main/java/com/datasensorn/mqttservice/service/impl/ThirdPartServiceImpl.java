@@ -30,24 +30,20 @@ public class ThirdPartServiceImpl implements ThirdPartService {
     private static final String APPCODE = "APPCODE "; //最后的空格不能去掉
 
     @Override
-    public WeatherInfo getWeatherInfo() {
+    public WeatherInfo getWeatherInfo(String areaId) throws Exception{
 
         WeatherInfo weatherInfo = null;
 
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(AUTHORIZATION, APPCODE + weatherServiceConfig.getAppCode());
         Map<String, String> querys = new HashMap<String, String>();
-        querys.put("areaid", "101200101");//武汉
+        querys.put("areaid", areaId);
 
-        try {
-            HttpResponse response = HttpUtils.doGet(weatherServiceConfig.getHost(),
-                    weatherServiceConfig.getPath(), HttpMethod.GET.name(), headers, querys);
+        HttpResponse response = HttpUtils.doGet(weatherServiceConfig.getHost(),
+                weatherServiceConfig.getPath(), HttpMethod.GET.name(), headers, querys);
 
-            String JSON_STR = EntityUtils.toString(response.getEntity());
-            weatherInfo = JSON.parseObject(JSON_STR, new TypeReference<WeatherInfo>() {});
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e);
-        }
+        String JSON_STR = EntityUtils.toString(response.getEntity());
+        weatherInfo = JSON.parseObject(JSON_STR, new TypeReference<WeatherInfo>() {});
 
         return weatherInfo;
     }

@@ -110,4 +110,10 @@
     from t_answer
     where question_id = #{questionId,jdbcType=INTEGER}
   </select>
+
+  <select id="getAnswerCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(1)
+      from t_answer
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </select>
 </mapper>

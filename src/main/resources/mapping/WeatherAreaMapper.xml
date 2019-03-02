@@ -148,4 +148,12 @@
       FROM t_weather_areaid
       where PROVEN = #{proven,jdbcType=VARCHAR}
   </select>
+
+  <select id="getAreaIdByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_weather_areaid
+    where NAMEEN = #{nameen,jdbcType=VARCHAR}
+    LIMIT 1
+  </select>
 </mapper>
