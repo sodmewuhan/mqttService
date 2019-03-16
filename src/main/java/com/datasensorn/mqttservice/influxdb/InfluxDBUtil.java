@@ -1,5 +1,6 @@
 package com.datasensorn.mqttservice.influxdb;
 
+import com.datasensorn.mqttservice.Utils.Constant;
 import com.datasensorn.mqttservice.conf.InfluxDBSettingConfig;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
@@ -62,5 +63,8 @@ public class InfluxDBUtil {
         Point.Builder builder = Point.measurement(measurement);
         builder.tag(tags);
         builder.fields(fields);
+        // 写入数据库
+        influxDB.write(builder.build());
+        LOGGER.info("save to influxDB success,the deviceid is " + fields.get(Constant.INFLUXDB_COL_DEVICEID));
     }
 }

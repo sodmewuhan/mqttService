@@ -6,24 +6,25 @@ import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.biz.AxisDatas;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
 import com.datasensorn.mqttservice.service.ChartService;
+import org.apache.commons.lang3.StringUtils;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeFieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 public class ChartServiceImpl implements ChartService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ChartServiceImpl.class);
-
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Autowired
     private InfluxDBUtil influxDBUtil;
@@ -41,12 +42,12 @@ public class ChartServiceImpl implements ChartService {
 
         StringBuffer command = new StringBuffer();
         Long queryDate = getQueryDate(chartRequest.getDays());  // 查询时间前面推行多长时间
-        command.append("SELECT * FROM fish WHERE deviceId = ")
-                .append(chartRequest.getDeviceId())
+        command.append("SELECT * FROM fish WHERE deviceId = ").append("\'")
+                .append(chartRequest.getDeviceId()).append("\'")
                 .append(" and boxid = ").append("\'").append(chartRequest.getBoxId()).append("\'")
                 .append(" and time > now() - ")
                 .append(queryDate)
-                .append("ms");
+                .append("m");
 
         ChartSerial chartSerial = new ChartSerial();
         Query query = new Query(command.toString(),influxDBSettingConfig.getDatabase());
@@ -68,21 +69,19 @@ public class ChartServiceImpl implements ChartService {
                         List<Object> objects = values.get(i);
                         //设置时间
                         String date = objects.get(0)==null ? "" : objects.get(0).toString();
-                        if (!org.springframework.util.StringUtils.isEmpty(date)) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(sdf.parse(date));
-                            calendar.add(Calendar.HOUR_OF_DAY,8);
-                            String title = calendar.get(Calendar.DAY_OF_MONTH) + "日" +
-                                    calendar.get(Calendar.HOUR_OF_DAY)  + "点" + calendar.get(Calendar.MINUTE) + "分" ;
+                        if (!StringUtils.isEmpty(date)) {
+                            DateTime time = new DateTime(date);
+                            String title = time.get(DateTimeFieldType.dayOfMonth()) + "日" +
+                                    time.get(DateTimeFieldType.hourOfDay())  + "点" + time.get(DateTimeFieldType.minuteOfHour()) + "分" ;
                             datas.getxAxis().add(title);
                         } else {
                             continue;
                         }
 
                         //设置值
-                        String value = objects.get(3) == null ? "" : objects.get(3).toString();
-                        if (!org.springframework.util.StringUtils.isEmpty(value)) {
-                            //TODO 值要除以10
+                        String value = objects.get(4) == null ? "" : objects.get(4).toString();
+                        if (!StringUtils.isEmpty(value)) {
+                            //TODO 值要除以1
                             datas.getyAxis().add(Float.valueOf(value) / TEN);
                         }
                     }
@@ -100,24 +99,31 @@ public class ChartServiceImpl implements ChartService {
      * 得到查询时间，用UTC时间查询，保持和inflxdb同步的时间
      */
     private Long getQueryDate(int day) {
+        Long gap = 0L;
 
-        Calendar end = Calendar.getInstance();  // 当前时间
-        Calendar begin = Calendar.getInstance();
-        if (day == 1) {
-            begin.set(Calendar.HOUR_OF_DAY,0);
-            begin.set(Calendar.MINUTE,0);
-        } else if (day == 2) {
-            // 查询昨天的记录
-            begin.add(Calendar.DAY_OF_MONTH,-1);
-            begin.set(Calendar.HOUR_OF_DAY,0);
-            begin.set(Calendar.MINUTE,0);
+        LocalDateTime dt = LocalDateTime.now();
+        // 由于influxdb采用的是UTC时间，当前时间向前推8个小时当作当前时间
+        LocalDateTime end = dt.plus(-8, ChronoUnit.HOURS);
+        LocalDateTime begin = end.withHour(0).withMinute(0);
+        if (day == 2) {
+            begin = begin.plus(-24,ChronoUnit.HOURS);
         } else if (day == 3) {
-            // 查询前天的记录
-            begin.add(Calendar.DAY_OF_MONTH,-2);
-            begin.set(Calendar.HOUR_OF_DAY,0);
-            begin.set(Calendar.MINUTE,0);
+            begin = begin.plus(-48,ChronoUnit.HOURS);
         }
-        return (end.getTimeInMillis() - begin.getTimeInMillis());
+        gap = begin.until(end,ChronoUnit.MINUTES);
+        return gap;
+    }
+
+    public static void main(String[] args) throws Exception{
+//        String time = "2019-03-15T12:17:11.039999015Z";
+//
+//        DateTime dateTime = new DateTime(time);
+////
+////        Instant instant = d.toInstant();
+////        ZoneId zone = ZoneId.systemDefault();
+////        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+////
+//        System.out.println(dateTime + "月" + dateTime.get(DateTimeFieldType.monthOfYear()));
     }
 }
 
