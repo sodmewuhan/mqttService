@@ -3,12 +3,14 @@ package com.datasensorn.mqttservice.controller;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
 import com.datasensorn.mqttservice.model.Result;
-import com.datasensorn.mqttservice.model.biz.AxisDatas;
+import com.datasensorn.mqttservice.model.biz.AxisData;
 import com.datasensorn.mqttservice.service.ChartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 服务器的图表
@@ -31,7 +33,7 @@ public class ChartRestController {
     public Result getday(@RequestBody ChartRequest chartRequest) {
         LOGGER.info("called the method is getday");
         ResultGenerator resultGenerator = new ResultGenerator();
-        AxisDatas chartSerial = chartSarvice.getChartSerial(chartRequest);
+        List<AxisData> chartSerial = chartSarvice.getChartSerial(chartRequest);
         return  resultGenerator.genSuccessResult(chartSerial);
     }
 }

@@ -27,4 +27,11 @@ public interface UserService {
      * @return
      */
     public boolean updateUserInfo(UserInfoDTO userInfoDTO) throws Exception;
+
+    /**
+     * 注册用户
+     * @param userInfoDTO
+     * @throws Exception
+     */
+    public void registerUser(UserInfoDTO userInfoDTO) throws Exception;
 }

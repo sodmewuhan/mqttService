@@ -80,4 +80,23 @@ public class UserRestController {
             return resultGenerator.genFailResult(e.getMessage());
         }
     }
+
+    /**
+     * 用户注册
+     * @param userInfoDTO
+     * @return
+     */
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
+    public Result registerUser(@RequestBody UserInfoDTO userInfoDTO) {
+        LOGGER.info("registerUser the user info the parameter is " + JSON.toJSONString(userInfoDTO,true));
+        ResultGenerator resultGenerator = new ResultGenerator();
+        try {
+            userService.registerUser(userInfoDTO);
+            return resultGenerator.genSuccessResult();
+        } catch (Exception e) {
+            LOGGER.error("用户注册失败",e);
+            return resultGenerator.genFailResult(e.getMessage());
+        }
+
+    }
 }

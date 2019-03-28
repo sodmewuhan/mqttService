@@ -1,7 +1,9 @@
 package com.datasensorn.mqttservice.service;
 
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
-import com.datasensorn.mqttservice.model.biz.AxisDatas;
+import com.datasensorn.mqttservice.model.biz.AxisData;
+
+import java.util.List;
 
 /**
  * 手机端的图表服务
@@ -13,7 +15,7 @@ public interface ChartService {
      * @param chartRequest
      * @return
      */
-    public AxisDatas getChartSerial(ChartRequest chartRequest);
+    public List<AxisData> getChartSerial(ChartRequest chartRequest);
 
 //    /**
 //     * 查询溶氧量

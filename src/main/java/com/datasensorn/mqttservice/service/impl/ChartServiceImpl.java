@@ -3,9 +3,10 @@ package com.datasensorn.mqttservice.service.impl;
 import com.datasensorn.mqttservice.conf.InfluxDBSettingConfig;
 import com.datasensorn.mqttservice.influxdb.InfluxDBUtil;
 import com.datasensorn.mqttservice.model.Request.ChartRequest;
-import com.datasensorn.mqttservice.model.biz.AxisDatas;
+import com.datasensorn.mqttservice.model.biz.AxisData;
 import com.datasensorn.mqttservice.model.biz.ChartSerial;
 import com.datasensorn.mqttservice.service.ChartService;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
@@ -36,7 +37,7 @@ public class ChartServiceImpl implements ChartService {
 
     private static final Integer TEN = 10;
     @Override
-    public AxisDatas getChartSerial(ChartRequest chartRequest) {
+    public List<AxisData> getChartSerial(ChartRequest chartRequest) {
         // 建立数据库的实例
         InfluxDB influxDB = influxDBUtil.getInfluxDB();
 
@@ -47,15 +48,16 @@ public class ChartServiceImpl implements ChartService {
                 .append(" and boxid = ").append("\'").append(chartRequest.getBoxId()).append("\'")
                 .append(" and time > now() - ")
                 .append(queryDate)
-                .append("m");
+                .append("m")
+                .append(" order by time ");
 
         ChartSerial chartSerial = new ChartSerial();
         Query query = new Query(command.toString(),influxDBSettingConfig.getDatabase());
 
         LOGGER.info("the database is " + query.getDatabase());
 
-        AxisDatas datas = new AxisDatas();
-        datas.setTitle("溶氧量");
+        List<AxisData> datas = Lists.newArrayList();
+//        datas.setTitle("溶氧量");
 
         QueryResult results = influxDB.query(query);
         if (results != null && results.getResults()!=null && !results.getResults().isEmpty()) {
@@ -66,14 +68,13 @@ public class ChartServiceImpl implements ChartService {
                 List<List<Object>> values = result.getSeries().get(0).getValues();
                 try {
                     for (int i=0; i < values.size(); i++) {
+                        AxisData data = new AxisData();
                         List<Object> objects = values.get(i);
                         //设置时间
                         String date = objects.get(0)==null ? "" : objects.get(0).toString();
                         if (!StringUtils.isEmpty(date)) {
                             DateTime time = new DateTime(date);
-                            String title = time.get(DateTimeFieldType.dayOfMonth()) + "日" +
-                                    time.get(DateTimeFieldType.hourOfDay())  + "点" + time.get(DateTimeFieldType.minuteOfHour()) + "分" ;
-                            datas.getxAxis().add(title);
+                            data.setXAxis(String.valueOf(time.getMillis()));
                         } else {
                             continue;
                         }
@@ -82,8 +83,10 @@ public class ChartServiceImpl implements ChartService {
                         String value = objects.get(4) == null ? "" : objects.get(4).toString();
                         if (!StringUtils.isEmpty(value)) {
                             //TODO 值要除以1
-                            datas.getyAxis().add(Float.valueOf(value) / TEN);
+//                            datas.getyAxis().add(Float.valueOf(value) / TEN);
+                            data.setYAxis(String.valueOf((Float.valueOf(value)/ TEN)));
                         }
+                        datas.add(data);
                     }
                 } catch (Exception e) {
                     LOGGER.error("parse data error ",e.getCause());
@@ -114,16 +117,10 @@ public class ChartServiceImpl implements ChartService {
         return gap;
     }
 
-    public static void main(String[] args) throws Exception{
-//        String time = "2019-03-15T12:17:11.039999015Z";
-//
-//        DateTime dateTime = new DateTime(time);
-////
-////        Instant instant = d.toInstant();
-////        ZoneId zone = ZoneId.systemDefault();
-////        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
-////
-//        System.out.println(dateTime + "月" + dateTime.get(DateTimeFieldType.monthOfYear()));
+    public static void main(String[] args) {
+        Long i = 1552708463266L;
+        DateTime time = new DateTime(i);
+        System.out.println(time);
     }
 }
 

@@ -66,4 +66,21 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("用户数据更新成功");
         return true;
     }
+
+    @Override
+    public void registerUser(UserInfoDTO userInfoDTO) throws Exception {
+        Assert.notNull(userInfoDTO,"参数对象不能为空");
+        Assert.hasText(userInfoDTO.getPhone(),"用户电话不能为空");
+        Assert.hasText(userInfoDTO.getPassword(),"密码不能为空");
+
+        // 检查用户名是否存在
+        UserInfo  userInfo = userInfoMapper.findUserByPhone(userInfoDTO.getPhone());
+        if (userInfo == null) {
+            userInfo = new UserInfo();
+            BeanUtils.copyProperties(userInfo,userInfoDTO);
+            userInfoMapper.insert(userInfo);
+        } else {
+            throw new Exception("该用户名已经存在");
+        }
+    }
 }

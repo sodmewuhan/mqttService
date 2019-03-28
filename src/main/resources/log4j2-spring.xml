@@ -72,7 +72,13 @@
             <appender-ref ref="RollingFileInfo"/>
         </logger>
 
-        <root level="all">
+        <!-- 将druid连接池的sql语句打印到日志文件中 -->
+        <logger name="druid.sql.Statement" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+
+
+        <root level="all" includeLocation="true">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>

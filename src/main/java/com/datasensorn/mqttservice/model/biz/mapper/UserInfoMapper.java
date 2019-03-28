@@ -26,8 +26,16 @@ public interface UserInfoMapper {
 
     /**
      * 根据用户电话，得到用户信息
+     * @param username
+     * @return
+     */
+    UserInfo findUserByUserName(String username);
+
+    /**
+     * 根据注册电话，得到用户信息
+     *
      * @param phone
      * @return
      */
-    UserInfo findUserByUserName(String phone);
+    UserInfo findUserByPhone(String phone);
 }
