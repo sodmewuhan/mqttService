@@ -22,7 +22,7 @@ public interface UserInfoMapper {
      * @param user
      * @return
      */
-    int checkUserLogin(UserInfo user);
+    UserInfo checkUserLogin(UserInfo user);
 
     /**
      * 根据用户电话，得到用户信息

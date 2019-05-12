@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice;
 
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -17,11 +18,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * spring boot 启动类
  */
 @SpringBootApplication
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @EnableScheduling
 @ServletComponentScan
 @EnableAsync(proxyTargetClass = true)
-@ComponentScan( basePackages = "${application.base-packages}" )
+@MapperScan("com.datasensorn.mqttservice.model.biz.mapper")
+//@ComponentScan( basePackages = "${application.base-packages}" )
 public class Application extends SpringBootServletInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);

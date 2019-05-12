@@ -26,6 +26,16 @@ public class ResultGenerator {
         return ret;
     }
 
+    public Result genSuccessResult(Object data,String token) {
+
+        Result ret = new Result();
+        ret.setCode(ResultCode.SUCCESS.code);
+        ret.setMessage(DEFAULT_SUCCESS_MESSAGE);
+        ret.setData(data);
+        ret.setToken(token);
+        return ret;
+    }
+
     public Result genFailResult(String message) {
         Result ret = new Result();
         ret.setCode(ResultCode.FAIL.code);

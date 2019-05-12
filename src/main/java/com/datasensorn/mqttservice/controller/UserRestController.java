@@ -1,12 +1,14 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.datasensorn.mqttservice.Utils.JwtHelper;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.controller.model.LoginParmObject;
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.UserInfo;
 import com.datasensorn.mqttservice.service.UserService;
+import com.google.common.collect.ImmutableBiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,29 @@ public class UserRestController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody LoginParmObject parmObject) {
-
-        boolean retn = userService.logon(parmObject.getUsername(),parmObject.getPassword());
         ResultGenerator resultGenerator = new ResultGenerator();
-        return resultGenerator.genSuccessResult(retn);
+        UserInfo userInfo = userService.logon(parmObject.getUsername(),parmObject.getPassword());
+        if (userInfo != null) {
+            // 生成TOKEN
+            String toke = JwtHelper.getToken(
+                    ImmutableBiMap.of("username",userInfo.getUsername(),
+                            "phone",userInfo.getPhone(),
+                            "city",userInfo.getCity())
+            );
+            return resultGenerator.genSuccessResult(true,toke);
+        } else {
+            return resultGenerator.genSuccessResult(false);
+        }
+
+    }
+
+    /**
+     * 用戶登錄退出
+     * @param parmObject
+     * @return
+     */
+    @RequestMapping(value = "logout",method = RequestMethod.POST)
+    public Result logout(@RequestBody LoginParmObject parmObject) {
 
     }
 

@@ -1,8 +1,11 @@
 package com.datasensorn.mqttservice.model;
 
+import lombok.Data;
+
 /**
  * 返回消息的统一对象
  */
+@Data
 public class Result {
 
     private int code;
@@ -11,27 +14,6 @@ public class Result {
 
     private Object data;
 
-    public int getCode() {
-        return code;
-    }
+    private String token;
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
 }

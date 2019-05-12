@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -25,8 +26,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     WeatherAreaMapper weatherAreaMapper; // 地区mapper
 
+    @Autowired
+    StringRedisTemplate redisTemplate;  // redis 工具
+
     @Override
-    public boolean logon(String userName, String password) {
+    public UserInfo logon(String userName, String password) {
         Assert.notNull(userName, "parameter userName is empty");
         Assert.notNull(password, "password phone is empty");
 
@@ -35,8 +39,7 @@ public class UserServiceImpl implements UserService {
         UserInfo user = new UserInfo();
         user.setUsername(userName);
         user.setPassword(password);
-        int ret = userInfoMapper.checkUserLogin(user);
-        return ret > 0 ?  true : false;
+        return userInfoMapper.checkUserLogin(user);
     }
 
     @Override
@@ -82,5 +85,9 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new Exception("该用户名已经存在");
         }
+    }
+
+    private void reNewToken() {
+
     }
 }

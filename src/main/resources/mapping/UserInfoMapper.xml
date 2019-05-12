@@ -18,15 +18,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_user
+    from t_user_customer
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_user
+    delete from t_user_customer
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
-    insert into t_user (id, phone, password, 
+    insert into t_user_customer (id, phone, password,
       userName, phoneNum, userType, 
       companyName, province, city
       )
@@ -36,7 +36,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
-    insert into t_user
+    insert into t_user_customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -97,7 +97,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
-    update t_user
+    update t_user_customer
     <set >
       <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
@@ -127,7 +127,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" >
-    update t_user
+    update t_user_customer
     set phone = #{phone,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       userName = #{username,jdbcType=VARCHAR},
@@ -139,9 +139,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="checkUserLogin" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" resultType="java.lang.Integer">
-     select count(1)
-        from t_user
+  <select id="checkUserLogin" parameterType="com.datasensorn.mqttservice.model.biz.UserInfo" resultMap="BaseResultMap">
+     select
+        <include refid="Base_Column_List" />
+        from t_user_customer
         where userName = #{username,jdbcType=VARCHAR}
           and password=#{password,jdbcType=VARCHAR}
   </select>
@@ -149,14 +150,14 @@
   <select id="findUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_user
+    from t_user_customer
     where userName = #{userName,jdbcType=VARCHAR}
   </select>
 
   <select id="findUserByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_user
+    from t_user_customer
     where phone = #{phone,jdbcType=VARCHAR}
   </select>
 </mapper>
