@@ -1,6 +1,7 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
+import com.datasensorn.mqttservice.annotation.LoginRequired;
 import com.datasensorn.mqttservice.controller.model.ProvCityDTO;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.WeatherInfo;
@@ -36,6 +37,7 @@ public class WeatherController {
      * @return
      */
     @RequestMapping(value = "getProv",method = RequestMethod.POST)
+    @LoginRequired
     public Result getProv() {
         ResultGenerator resultGenerator = new ResultGenerator();
         try {

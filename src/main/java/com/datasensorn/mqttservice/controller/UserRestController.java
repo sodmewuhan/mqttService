@@ -1,19 +1,19 @@
 package com.datasensorn.mqttservice.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.datasensorn.mqttservice.Utils.JwtHelper;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.controller.model.LoginParmObject;
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.UserInfo;
 import com.datasensorn.mqttservice.service.UserService;
-import com.google.common.collect.ImmutableBiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 用户管理控制类
@@ -36,13 +36,7 @@ public class UserRestController {
         ResultGenerator resultGenerator = new ResultGenerator();
         UserInfo userInfo = userService.logon(parmObject.getUsername(),parmObject.getPassword());
         if (userInfo != null) {
-            // 生成TOKEN
-            String toke = JwtHelper.getToken(
-                    ImmutableBiMap.of("username",userInfo.getUsername(),
-                            "phone",userInfo.getPhone(),
-                            "city",userInfo.getCity())
-            );
-            return resultGenerator.genSuccessResult(true,toke);
+            return resultGenerator.genSuccessResult(userInfo);
         } else {
             return resultGenerator.genSuccessResult(false);
         }
@@ -50,13 +44,40 @@ public class UserRestController {
     }
 
     /**
-     * 用戶登錄退出
-     * @param parmObject
+     * 用户登出
+     * @param token
      * @return
      */
     @RequestMapping(value = "logout",method = RequestMethod.POST)
-    public Result logout(@RequestBody LoginParmObject parmObject) {
+    public Result logout(@RequestBody String token) {
 
+        Assert.notNull(token,"token值为空");
+        ResultGenerator resultGenerator = new ResultGenerator();
+        userService.invalidate(token);
+
+        return resultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 根据用户token得到用户信息
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "verifyUserByToken",method = RequestMethod.POST)
+    public Result verifyUserByToken(@RequestBody String token) {
+
+        ResultGenerator resultGenerator = new ResultGenerator();
+        try {
+            UserInfo userInfo = userService.verifyUserByToken(token);
+            if (userInfo != null) {
+                return resultGenerator.genSuccessResult(userInfo);
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e);
+            return resultGenerator.genFailResult(e.getMessage());
+        }
+
+        return resultGenerator.genFailResult("token无法取得用户名称信息");
     }
 
     /**

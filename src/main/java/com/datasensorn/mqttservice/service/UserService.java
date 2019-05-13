@@ -3,6 +3,7 @@ package com.datasensorn.mqttservice.service;
 import com.datasensorn.mqttservice.controller.model.UserInfoDTO;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.UserInfo;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 用户服务
@@ -35,4 +36,18 @@ public interface UserService {
      * @throws Exception
      */
     public void registerUser(UserInfoDTO userInfoDTO) throws Exception;
+
+    /**
+     * 通过token获取用户信息
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    UserInfo verifyUserByToken(String token) throws Exception;
+
+    /**
+     * token失效
+     * @param token
+     */
+    void invalidate(String token);
 }

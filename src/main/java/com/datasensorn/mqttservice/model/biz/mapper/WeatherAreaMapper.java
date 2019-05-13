@@ -3,13 +3,15 @@ package com.datasensorn.mqttservice.model.biz.mapper;
 import com.datasensorn.mqttservice.model.biz.WeatherArea;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 得到地区信息
  */
-@Mapper
+//@Mapper
+@Repository
 public interface WeatherAreaMapper {
     int deleteByPrimaryKey(String areaid);
 

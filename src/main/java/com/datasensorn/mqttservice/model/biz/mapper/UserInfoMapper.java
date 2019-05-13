@@ -2,8 +2,10 @@ package com.datasensorn.mqttservice.model.biz.mapper;
 
 import com.datasensorn.mqttservice.model.biz.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Mapper
+@Repository
 public interface UserInfoMapper {
     int deleteByPrimaryKey(Integer id);
 

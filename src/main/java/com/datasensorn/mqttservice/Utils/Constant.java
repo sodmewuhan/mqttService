@@ -45,6 +45,10 @@ public class Constant {
 
     public static final String APP_NAME = "fishtech.apk";
 
-    /** APP 文件大小的限制，限制在20M之内 */
-    public static final Integer APP_FILELENGTH = 20 * 1024 * 1024;
+    // token的保存信息
+    public static final String USER_NAME = "username";
+    // token 的保存信息
+    public static final String PHONE = "phone";
+    // 认证
+    public static final String AUTHORIZATION = "authorization";
 }

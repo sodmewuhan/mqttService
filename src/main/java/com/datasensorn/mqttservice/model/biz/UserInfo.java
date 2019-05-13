@@ -27,4 +27,9 @@ public class UserInfo {
     private String city;
 
     private String cityId;
+
+    /**
+     * jwt的token信息
+     */
+    private String token;
 }
