@@ -2,8 +2,9 @@ package com.datasensorn.mqttservice.model.biz.mapper;
 
 import com.datasensorn.mqttservice.model.biz.DeviceSetAutoInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
-@Mapper
+@Repository
 public interface DeviceSetAutoInfoMapper {
     int deleteByPrimaryKey(Integer id);
 

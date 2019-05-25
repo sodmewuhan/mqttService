@@ -12,6 +12,7 @@ public class Constant {
 
     public static final String MQTT_DOWN_PREFIX = "DOWN/";
 
+    public static final String SPLIT = "/";
     /**
      *
      */

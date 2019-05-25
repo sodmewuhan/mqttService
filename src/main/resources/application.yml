@@ -64,7 +64,7 @@ spring:
     suffix: .html
     cache:  false
     mode: HTML5
-#redis
+#redis  jwt 使用
   redis:
     # Redis服务器地址
     host: 101.37.146.78
