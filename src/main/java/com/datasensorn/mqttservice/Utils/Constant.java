@@ -52,4 +52,7 @@ public class Constant {
     public static final String PHONE = "phone";
     // 认证
     public static final String AUTHORIZATION = "authorization";
+
+    // 加密的“盐”
+    public static final String SALT = "G0CvDz7oJn6";
 }

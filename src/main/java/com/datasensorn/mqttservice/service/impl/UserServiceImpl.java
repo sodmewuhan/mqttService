@@ -11,6 +11,7 @@ import com.datasensorn.mqttservice.service.UserService;
 import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
     private static final Integer EXTEND_TIME = 30;
 
+    private static BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+
     @Override
     public UserInfo logon(String userName, String password) {
         Assert.notNull(userName, "parameter userName is empty");
@@ -48,7 +51,11 @@ public class UserServiceImpl implements UserService {
                 " and password :" + password);
         UserInfo user = new UserInfo();
         user.setUsername(userName);
-        user.setPassword(password);
+        // 解密
+        textEncryptor.setPassword(Constant.SALT);
+        String pwd = textEncryptor.decrypt(password);
+        user.setPassword(pwd);
+
         UserInfo userInfo = userInfoMapper.checkUserLogin(user);
         if (userInfo != null) {
             // 生成TOKEN
