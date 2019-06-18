@@ -24,6 +24,10 @@ application:
 # APK 下载升级管理相关配置
   storeFilePath:  appFile/store
 
+jasypt:
+  encryptor:
+    password: sodmewuhan
+
 spring:
 #mysql 数据库
   datasource:
@@ -32,8 +36,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     platform: mysql
     url:  jdbc:mysql://101.37.146.78:3306/datasensorn?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: hello123456
+    username: ENC(3MSmXyIfYr45wWfphZlFHQ==)
+    password: ENC(tuNUWfAXpWVB1PZK6g75r0qth7yPMH1/)
     initialSize: 5
     minIdle: 5
     maxActive: 30
@@ -73,3 +77,4 @@ spring:
 mybatis:
   mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
   type-aliases-package: com.datasensorn.mqttservice.model.biz  # 注意：对应实体类的路径
+
