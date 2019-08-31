@@ -40,8 +40,13 @@ public class UserServiceImpl implements UserService {
 
     private static final Integer EXTEND_TIME = 30;
 
+
     private static BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 
+    static {
+        // 解密
+        textEncryptor.setPassword(Constant.SALT);
+    }
     @Override
     public UserInfo logon(String userName, String password) {
         Assert.notNull(userName, "parameter userName is empty");
@@ -51,8 +56,7 @@ public class UserServiceImpl implements UserService {
                 " and password :" + password);
         UserInfo user = new UserInfo();
         user.setUsername(userName);
-        // 解密
-        textEncryptor.setPassword(Constant.SALT);
+
         String pwd = textEncryptor.decrypt(password);
         user.setPassword(pwd);
 
@@ -141,8 +145,6 @@ public class UserServiceImpl implements UserService {
     private void reNewToken(String token,UserInfo userInfo) {
         // 保存至redis
         stringRedisTemplate.opsForValue().set(userInfo.getUsername(),token,EXTEND_DAY,TimeUnit.DAYS);
-//        // 延长过期时间
-//        stringRedisTemplate.expire(userInfo.getUsername(),EXTEND_DAY, TimeUnit.DAYS);
     }
 
     @Override

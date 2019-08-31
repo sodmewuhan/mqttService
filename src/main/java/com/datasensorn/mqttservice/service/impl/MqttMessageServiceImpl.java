@@ -25,6 +25,16 @@ public class MqttMessageServiceImpl implements MqttMessageService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MqttMessageServiceImpl.class);
 
+    // 溶解氧
+    private final static String DISSOLVED_OXYGEN = "1";
+
+    // 温度
+    private final static String TEMPERATURE = "2";
+
+    // PH值
+    private final static String PH = "3";
+
+
     @Autowired
     private BoxInfoService boxInfoService;
 
@@ -33,12 +43,6 @@ public class MqttMessageServiceImpl implements MqttMessageService {
 
     @Autowired
     private DeviceSetAutoInfoMapper deviceSetAutoInfoMapper;
-
-    private final static String VALUE = "value";
-
-    private final static String STATE = "state";
-
-    private final static String DEVICE = "deviceId";
 
     @Override
     public void handleMsg(Message<?> message) {
@@ -55,7 +59,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                         return;
                     }
                     String msg = String.valueOf(message.getPayload());
-                    LOGGER.info("***************MqttMessageServiceImpl the receive message is " + msg);
+                    LOGGER.info("***************MqttMessageServiceImpl the receive message topic is  " + topic + " and the message is " + msg);
                     // 得到设备的物联网卡号
                     String boxId = topics[1];
                     String topicEx = topics[2]; // 上传的是控制设备还是水质信息
@@ -64,29 +68,8 @@ public class MqttMessageServiceImpl implements MqttMessageService {
                         LOGGER.error("上传的信息中，没有物联网卡号或者 上传类型的信息");
                         return;
                     }
-
+                    // 处理消息
                     deliverMessage(boxId,topicEx,msg);
-
-//                    if (isValidJSON(msg)) {
-//                        JSONObject jsonObject = JSON.parseObject(msg);
-//                        if (jsonObject.getIntValue(DEVICE) < 10) {
-//                            // TODO 保存上传的水质数据
-//                            savePoolStatusToInfluxdb(topics[1], jsonObject);
-//                        } else {
-//                            // TODO 保存上传的设备数据
-//                            saveDeviceStatusToInfluxdb(topics[1], jsonObject);
-//                            saveDeviceStatusToDB(topics[1],jsonObject);
-//                        }
-//                    } else {
-//                        // 其他类型的上传
-//                        String prefix = msg.substring(0,1);
-//                        if ("t".equals(prefix)) {
-//                            // 保存定时开关
-//                        } else if ("o".equals(prefix)) {
-//                            // 保存上下限
-//                            saveDeviceTopLow(topics[1],msg);
-//                        }
-//                    }
                 }
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(),e);
@@ -122,16 +105,13 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         if ("V".equalsIgnoreCase(control)) {
             // 上传的是水质情况
             String id = topicEx.substring(1,2);
-            if ("1".equalsIgnoreCase(id)) {
-                // 溶解氧
-                UpWaterQualityDTO upWaterQualityDTO = new UpWaterQualityDTO();
-                upWaterQualityDTO.setBoxid(boxId);
-                upWaterQualityDTO.setDeviceId(id);
-                upWaterQualityDTO.setValue(message);
 
-                savePoolStatusToInfluxdb(upWaterQualityDTO);
-            }
-            // TODO 扩展其他的数值
+            UpWaterQualityDTO upWaterQualityDTO = new UpWaterQualityDTO();
+            upWaterQualityDTO.setBoxid(boxId);
+            upWaterQualityDTO.setDeviceId(id);
+            upWaterQualityDTO.setValue(message);
+
+            savePoolStatusToInfluxdb(upWaterQualityDTO);
         }
 
         if ("D".equalsIgnoreCase(control)) {
@@ -147,20 +127,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         }
     }
 
-//    @Deprecated
-//    private void savePoolStatusToInfluxdb(String topic, JSONObject jsonObject) {
-//        Map<String, Object> fields = Maps.newHashMap();
-//        Map<String, String> tags = Maps.newHashMap();
-//
-//        tags.put("TAG_CODE", topic);
-//        fields.put(Constant.INFLUXDB_COL_BOXID,topic);
-//        fields.put(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getString(DEVICE));
-//        fields.put(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE));
-//        influxDBUtil.insert(Constant.INFLUXDB_NAME_FISH, tags, fields);
-//
-//        LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
-//    }
-
+    // 水质状态
     private void savePoolStatusToInfluxdb(UpWaterQualityDTO upWaterQualityDTO) {
         Map<String, Object> fields = Maps.newHashMap();
         Map<String, String> tags = Maps.newHashMap();
@@ -174,20 +141,7 @@ public class MqttMessageServiceImpl implements MqttMessageService {
         LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
     }
 
-//    private void saveDeviceStatusToInfluxdb(String topic,JSONObject jsonObject) {
-//
-//        Map<String, Object> fields = Maps.newHashMap();
-//        Map<String, String> tags = Maps.newHashMap();
-//
-//        tags.put("TAG_CODE", topic);
-//        fields.put(Constant.INFLUXDB_COL_BOXID,topic);
-//        fields.put(Constant.INFLUXDB_COL_DEVICEID,jsonObject.getIntValue(DEVICE) - 10);
-//        fields.put(Constant.INFLUXDB_COL_VALUE,jsonObject.getString(VALUE));
-//        influxDBUtil.insert(Constant.INFLUXDB_NAME_DEVICE, tags, fields);
-//
-//        LOGGER.info("the function savePoolStatusToInfluxdb save the data to inflxdb success." );
-//    }
-
+    // 保存设备状态
     private void saveDeviceStatusToInfluxdb(UpWaterQualityDTO upWaterQualityDTO) {
 
         Map<String, Object> fields = Maps.newHashMap();
@@ -216,18 +170,6 @@ public class MqttMessageServiceImpl implements MqttMessageService {
 
         LOGGER.info("the function saveDeviceStatusToDB save the data to DB success." );
     }
-//    private boolean isValidJSON(String str) {
-//        try {
-//            JSONObject.parseObject(str);
-//        } catch (JSONException ex) {
-//            try {
-//                JSONObject.parseArray(str);
-//            } catch (JSONException ex1) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     /** 保存设备的最高和最低值 */
     private void saveDeviceTopLow(String topic,String msg) {

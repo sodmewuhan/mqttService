@@ -3,6 +3,7 @@ package com.datasensorn.mqttservice.controller;
 import com.datasensorn.mqttservice.Utils.ResultGenerator;
 import com.datasensorn.mqttservice.annotation.LoginRequired;
 import com.datasensorn.mqttservice.controller.model.ProvCityDTO;
+import com.datasensorn.mqttservice.model.Request.RequestParam;
 import com.datasensorn.mqttservice.model.Result;
 import com.datasensorn.mqttservice.model.biz.WeatherInfo;
 import com.datasensorn.mqttservice.service.ThirdPartService;
@@ -67,15 +68,15 @@ public class WeatherController {
         return resultGenerator.genFailResult("获取市县信息失败");
     }
     /**
-     *
+     * 根据地区ID编号，得到当地的3天内天气预报
      * @param areaId
      * @return
      */
     @RequestMapping(value = "getWeather", method=RequestMethod.POST)
-    public Result getWeather(@RequestBody String areaId) {
+    public Result getWeather(@RequestBody RequestParam requestParam) {
         ResultGenerator resultGenerator = new ResultGenerator();
         try {
-            WeatherInfo weatherInfo = thirdPartService.getWeatherInfo(areaId);
+            WeatherInfo weatherInfo = thirdPartService.getWeatherInfo(requestParam.getId());
             return resultGenerator.genSuccessResult(weatherInfo);
         } catch (Exception e) {
             LOGGER.error("",e);
