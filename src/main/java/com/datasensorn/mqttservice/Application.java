@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
-@EnableEurekaClient
+//@EnableEurekaClient
 @ServletComponentScan
 @EnableAsync(proxyTargetClass = true)
 @MapperScan("com.datasensorn.mqttservice.model.biz.mapper")

@@ -76,18 +76,15 @@ spring:
     host: 101.37.146.78
     # Redis服务器连接端口
     port: 6379
-# 日志收集
-#  zipkin:
-#    base-url: http://localhost:7770
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
   type-aliases-package: com.datasensorn.mqttservice.model.biz  # 注意：对应实体类的路径
 
-eureka:
-  client:
-    service-url:
-      defaultZone:  http://admin:123456@101.37.146.78:7776/eureka/
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone:  http://admin:123456@101.37.146.78:7776/eureka/
 logging:
   level:
     root: info
